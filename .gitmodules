@@ -1,0 +1,3 @@
+[submodule "util/gym-http-api"]
+	path = util/gym-http-api
+	url = https://github.com/korymath/gym-http-api
