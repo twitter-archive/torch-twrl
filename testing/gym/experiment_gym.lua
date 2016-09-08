@@ -24,7 +24,58 @@ local function testGym(envName, agent, nSteps, nIterations, opt)
          agentOpt.learningUpdate = agent.learningUpdate
          agentOpt.envDetails = gum.getStateAndActionSpecs(agentOpt.stateSpace, agentOpt.actionSpace)
       local agent = require('../../agents/gym/gym_base_agent')(agentOpt)
-      
+
+      for j=1,nIterations do
+            local state = client:env_reset(instance_id)
+            local action = agent.selectAction(client, instance_id, state, envDetails, agent)
+            for i = 1, nSteps do
+               local nextState, reward, terminal
+               -- TODO: clean up this if statement
+               render = render == 'true' and true or false
+               nextState, reward, terminal, _ = client:env_step(instance_id, action, render)
+
+               -- set terminal to true if reached max number of steps
+               if i == nSteps then terminal = true end
+
+               -- select the next action
+               --nextAction = agent.selectAction(client, instance_id, state, envDetails, agent)
+               agent.reward({state = state, action = action, reward = reward, terminal = terminal, agent = agent})
+               action = agent.selectAction(client, instance_id, state, envDetails, agent)
+               --[[if learningType == 'noBatch' then
+                  -- Perform the learning update with the selected next action if needed
+                  local _ = agent.learn(state, action, reward, nextState, nextAction, terminal, agent)
+                  -- pass through the updated action AFTER learning update if algorithm demands
+                  updatedActionChoice = agent.selectAction(client, instance_id, nextState, envDetails, agent)
+               end
+
+               -- Store the step to a trajectory table
+               -- autocast tables, to handle cast to tensor
+               traj[i] = {}
+               state = (type(state)=='number') and {state} or state
+               traj[i].state = torch.DoubleTensor(state)
+               action = (type(action)=='number') and {action} or action
+               traj[i].action = torch.DoubleTensor(action)
+               traj[i].reward = reward
+               traj[i].nextState = torch.DoubleTensor(nextState)
+               traj[i].terminal = (terminal and 1) or 0
+
+               -- set the state to the next state
+               state = nextState
+
+               -- set the action to the next action
+               if updatedActionChoice ~= nil then
+                  action = updatedActionChoice
+               else
+                  action = nextAction
+               end
+
+               -- break if terminal
+               ]]
+
+               if terminal then break end
+            end
+
+
       if agentOpt.learningType == 'noBatch' then
          local trajs = {}
          local episodeRewards = torch.Tensor(nIterations):zero()
@@ -57,10 +108,10 @@ local function testGym(envName, agent, nSteps, nIterations, opt)
             end
          end
       end
-      
+
       -- Dump result info to disk
       client:env_monitor_close(instance_id)
-      
+
       if opt.uploadResults == true then
          -- Upload to the scoreboard.
          -- Assumes 'OPENAI_GYM_API_KEY' set on the client side
