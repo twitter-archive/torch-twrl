@@ -1,9 +1,6 @@
-# torch-rl 
+# torch-rl: Reinforcement Learning in Torch
 
-Goal
-----
-
-Building an RL framework using Lua, Torch, and Autograd for use at Twitter.
+torch-rl is an RL framework built in Lua/Torch by Twitter.
 
 Installation
 ------------
