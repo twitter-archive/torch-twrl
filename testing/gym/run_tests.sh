@@ -4,10 +4,13 @@ clear
 echo "Testing Gym environments and agents:"
 echo "*************************************************"
 
-# th test_gym.lua --env CartPole-v1 --policy egreedy --epsilon 1 --epsilonDecayRate 0.9999 --model qFunction --learningType noBatch --nIterations 1000 --nSteps 10000 --renderAllSteps true --video 0 --learningUpdate tdLambda --numTiles 32 --numTilings 4 --lambda 0.9 --gamma 0.99 --force true --alphaScaleFactor 0.5 --initialWeightVal 0 --tdLearnUpdate SARSA
+# th test_gym.lua --env CartPole-v1 --policy egreedy --epsilon 1 --epsilonDecayRate 0.9999999 --model qFunction --learningType noBatch --nIterations 1000 --nSteps 300 --renderAllSteps false --video 100 --learningUpdate tdLambda --numTiles 8 --numTilings 2 --lambda 0.9 --gamma 0.98 --force true --alphaScaleFactor 0.5 --initialWeightVal 0 --tdLearnUpdate qLearning
+# th test_gym.lua --env MountainCar-v0 --policy egreedy --epsilon 1 --epsilonDecayRate 0.99999 --model qFunction --learningType noBatch --nIterations 1000 --nSteps 500 --renderAllSteps false --video 500 --learningUpdate tdLambda --numTiles 16 --numTilings 4 --lambda 0.9 --gamma 0.98 --force true --alphaScaleFactor 1 --initialWeightVal 0 --tdLearnUpdate qLearning
+# echo "*************************************************"
+# echo "*************************************************"
+# echo "*************************************************"
+# # 50000 max number of episodes.
 
-
-# 50000 max number of episodes.
 th test_gym.lua -env 'Pendulum-v0' -nSteps 30 -nIterations 5 -timestepsPerBatch 30 -policy ddpgActor -model ddpgActorCritic -learningUpdate ddpgUpdate --uploadResults false -video 0 -renderAllSteps true -showTrajectory false
 
 # echo "Gym Environment: MountainCar-v0"

@@ -26,6 +26,7 @@ local function getAgent(opt)
       scaleFactor = stateScalingFactor,
       stateMins = stateMins
    }
+   print(tcOpt)
    local tc = require '../../util/tilecoding'(tcOpt)
    local alpha = opt.alpha
    local gamma = opt.gamma

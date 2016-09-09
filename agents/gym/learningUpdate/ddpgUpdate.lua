@@ -32,11 +32,8 @@ local function learn(trajs, nIter, envDetails, tj, agent)
       allAdvantages = torch.cat(allAdvantages, advs[i+1])
    end
    
-   -- TODO: there may be a better way to pass the actions along
-   targetQ = agent.model.critic:forward(torch.cat(allNextObservations,agent.model.actor:forward(allNextObservations)))
+   targetQ = agent.model.critic:forward{allNextObservations,agent.model.actor:forward(allNextObservations)}
 
-   print(targetQ)
-   
    -- Do the policy gradient update step
 	local N = allObservations:size(1)
 	local output = agent.model.actor:forward(allObservations)
@@ -73,12 +70,12 @@ local function learn(trajs, nIter, envDetails, tj, agent)
    -- Add to gradEntropy to targets to improve exploration and prevent convergence to potentially suboptimal deterministic policy
    targets:add(gradEntropy * agent.beta)
    agent.model.actor:backward(allObservations, targets)
-   agent.gradThetaSq = agent.gradThetaSq * agent.weightDecay + torch.pow(gradTheta, 2) * (1 - agent.weightDecay)
+   -- agent.gradThetaSq = agent.gradThetaSq * agent.weightDecay + torch.pow(gradTheta, 2) * (1 - agent.weightDecay)
    if agent.gradClip > 0 then
       gradTheta:clamp(-agent.gradClip, agent.gradClip)
    end
    -- tune the stepsize down as learning continues
    -- print('Step size ' .. stepsize)
-   theta:add(torch.cdiv(gradTheta * stepsize, torch.sqrt(agent.gradThetaSq) + 1e-20))
+   -- theta:add(torch.cdiv(gradTheta * stepsize, torch.sqrt(agent.gradThetaSq) + 1e-20))
 end
 return learn

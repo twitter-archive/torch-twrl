@@ -5,10 +5,12 @@ local function learn(state, action, reward, nextState, nextAction, terminal, age
       local _ = agent.model.resetEligibility()
    else
       local _ = agent.model.accumulateEligibility(state, action)
+      -- Q-Learning
       if agent.tdLearnUpdate == 'qLearning' then
          local Q = agent.model.estimateAllQ(nextState)
          local maxQ, maxIdx = Q:max(1)
          delta = reward - agent.model.estimateQ(state, action) + (agent.gamma * maxQ[1])
+      -- SARSA
       elseif agent.tdLearnUpdate == 'SARSA' then
          local Q = agent.model.estimateQ(nextState, nextAction)
          delta = reward - agent.model.estimateQ(state, action) + (agent.gamma * Q)

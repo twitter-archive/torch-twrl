@@ -16,13 +16,35 @@ local function getAgent(opt)
    if opt.model then
       local modelName = opt.model
       agent.model = require('../gym/model/' .. opt.model)(envDetails.nbStates, envDetails.nbActions, agent)
-      -- TODO: fix how the agents with model parameters are identified
+      -- TODO: fix how the agents wit h model parameters are identified
       if (modelName == 'singleHiddenLayerCategorical') or (modelName == 'singleHiddenLayerNormal') then
          agent.theta, agent.gradTheta = agent.model:getParameters()
          agent.gradThetaSq = torch.Tensor(agent.gradTheta:size()):zero()
       elseif (modelName == 'ddpgActorCritic') then
-         agent.theta, agent.gradTheta = agent.model.actor:getParameters()
-         agent.gradThetaSq = torch.Tensor(agent.gradTheta:size()):zero()
+         print(agent.model.actor)
+         print(agent.model.critic)
+         -- Initialize the last layer parameters
+         agent.model.actor.modules[7].weight:uniform(-3e-4, 3e-4)
+         agent.model.actor.modules[7].bias:zero()
+         agent.model.critic.modules[6].weight:uniform(-3e-4, 3e-4)
+         agent.model.critic.modules[6].bias:zero()
+         -- build the target networks
+         agent.model.actor_target = agent.model.actor:clone('running_mean', 'running_std')
+         agent.model.critic_target = agent.model.critic:clone('running_mean', 'running_std')
+
+         -- get the parameters of the actor/critics and target networks
+         -- agent.theta, agent.gradTheta = agent.model.actor:getParameters()
+         -- agent.gradThetaSq = torch.Tensor(agent.gradTheta:size()):zero()
+         agent.model.params = {}
+         agent.model.gradParams = {}
+         agent.model.params.actor, agent.model.gradParams.actor = agent.model.actor:getParameters()
+         agent.model.params.actor_target, _ = agent.model.actor_target:getParameters()
+         agent.model.params.critic, agent.model.gradParams.critic = agent.model.critic:getParameters()
+         agent.model.params.critic_target, _ = agent.model.critic_target:getParameters()
+         
+         -- Set criterion
+         criterion = nn.MSECriterion()
+         -- set the crtiterion for the opmization
       end
       print('Model: ' .. modelName)
    end
@@ -87,12 +109,13 @@ local function getAgent(opt)
          end
          
          -- select the next action
-         nextAction = agent.selectAction(client, instance_id, state, envDetails, agent)
+         nextAction = agent.selectAction(client, instance_id, nextState, envDetails, agent)
+         
          if learningType == 'noBatch' then
             -- Perform the learning update with the selected next action if needed
             local _ = agent.learn(state, action, reward, nextState, nextAction, terminal, agent)
             -- pass through the updated action AFTER learning update if algorithm demands
-            updatedActionChoice = agent.selectAction(client, instance_id, nextState, envDetails, agent)
+            -- updatedActionChoice = agent.selectAction(client, instance_id, nextState, envDetails, agent)
          end
 
          -- Store the step to a trajectory table
@@ -108,15 +131,16 @@ local function getAgent(opt)
          
          -- set the state to the next state
          state = nextState
+         action = nextAction
 
-         -- set the action to the next action
-         if updatedActionChoice ~= nil then
-            action = updatedActionChoice
-         else
-            action = nextAction
-         end
-
+         -- -- set the action to the next action
+         -- if updatedActionChoice ~= nil then
+         --    action = updatedActionChoice
+         -- else
+         --    action = nextAction
+         -- end
          -- break if terminal
+
          if terminal then break end
       end
       return traj
