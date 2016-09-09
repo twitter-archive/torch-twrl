@@ -38,7 +38,7 @@ local function testGym(envName, agent, nSteps, nIterations, opt)
              if i == nSteps then terminal = true end
              agent.reward({state = state, reward = reward, terminal = terminal, nextState = nextState})
              state = nextState
-             perf.addReward(i, reward)
+             perf.addReward(i, reward, terminal)
              if terminal then break end
           end
           print(nIter)
