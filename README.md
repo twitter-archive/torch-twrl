@@ -1,22 +1,36 @@
 # torch-rl 
 
 Goal
+----
+
 Building an RL framework using Lua, Torch, and Autograd for use at Twitter.
+
 Installation
+------------
+
 Grab torch-rl from the git repository
 You should have everything you need to run local tests (./testing/local/run_tests.sh)
+
 Want to play in the gym?
-Start a virtual environment (not necessary but helps keep everything clean)
-Download and install OpenAI gym (https://github.com/openai/gym)
-Download gym-http-api (https://github.com/korymath/gym-http-api) to the (/util/) folder in torch-rl
-Test the gym-http-api with nose2 (go to /util/gym-http-api and run nose2)
-Test the gym-http-api binding-lua (/util/gym-http-api/binding-lua/test_api.lua)
+------------------------
+
+* Start a virtual environment (not necessary but helps keep everything clean)
+* Download and install OpenAI gym (https://github.com/openai/gym)
+* Download gym-http-api (https://github.com/korymath/gym-http-api) to the (/util/) folder in torch-rl
+* Test the gym-http-api with nose2 (go to /util/gym-http-api and run nose2)
+* Test the gym-http-api binding-lua (/util/gym-http-api/binding-lua/test_api.lua)
+
 Works so far? 
+
 You should have everything you need to run gym tests:
-Activate your virtual environment
-Start your gym_http_server with python gym_http_server.py
-Run the testing script: (./testing/gym/run_tests.sh)
+
+* Activate your virtual environment
+* Start your gym_http_server with python gym_http_server.py
+* Run the testing script: (./testing/gym/run_tests.sh)
+
 Dependencies
+------------
+
 This library is compatible with the OpenAI Gym with the use of the modified Gym HTTI API (located in /testing/gym-http-api), based on the original code from OpenAI.
 Torch dependencies which must be installed for torch-r (can be installed with luarocks install PACKAGE NAME)
 torch
