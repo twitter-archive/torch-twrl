@@ -1,5 +1,5 @@
-local tds = require 'tds'
 local function trajectory()
+   local tds = require 'tds'
    local tj = {}
    tj.states = tds.Vec()
    tj.actions = tds.Vec()

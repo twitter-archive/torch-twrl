@@ -1,8 +1,8 @@
 local t  = require 'torch'
 local nn = require 'nn'
 local os = require 'os'
-local tj = require '../../util/trajectory'()
-local util = require '../../util/utilities'()
+local tj = require 'rl.trajectory'
+local util = require 'rl.util'()
 
 local function getAgent(opt)
    local opt = opt or {}
