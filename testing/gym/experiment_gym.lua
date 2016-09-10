@@ -26,20 +26,25 @@ local function testGym(envName, agent, nSteps, nIterations, opt)
          agentOpt.envDetails = gum.getStateAndActionSpecs(agentOpt.stateSpace, agentOpt.actionSpace)
       local agent = require('../../agents/gym/gym_base_agent')(agentOpt)
 
+      local function actionSampler() return client:env_action_space_sample(instance_id) end
+
       for nIter=1,nIterations do
           local state = client:env_reset(instance_id)
           perf.reset()
           for i = 1, nSteps do
              local action = agent.selectAction(client, instance_id, state, envDetails, agent)
+
              -- TODO: clean up this if statement
              render = render == 'true' and true or false
              nextState, reward, terminal, _ = client:env_step(instance_id, action, render)
              -- set terminal to true if reached max number of steps
              if i == nSteps then terminal = true end
-             agent.reward({state = state, reward = reward, terminal = terminal, nextState = nextState})
+             agent.reward({state = state, reward = reward, terminal = terminal, nextState = nextState, nIter = nIter})
              state = nextState
-             perf.addReward(i, reward, terminal)
-             if terminal then break end
+             perf.addReward(nIter, reward, terminal)
+             if terminal then
+               state = client:env_reset(instance_id)
+            end
           end
           print(nIter)
           print(perf.getSummary())

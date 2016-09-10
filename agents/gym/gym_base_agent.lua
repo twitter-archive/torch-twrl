@@ -42,7 +42,7 @@ local function getAgent(opt)
    end
 
    policy = require('../gym/policy/' .. opt.policy)({
-     client = client,
+     client = opt.client,
      instance_id = instance_id,
      nStates = envDetails.nbStates,
      model = model.model
@@ -71,7 +71,8 @@ local function getAgent(opt)
    ]]
 
    function selectAction(client, instance_id, state)
-      local action = policy(state)
+      local actionSampler = function () return client:env_action_space_sample(instance_id) end
+      local action = policy(state, actionSampler)
       previousAction = latestAction
       latestAction = action
       return action
@@ -94,15 +95,14 @@ local function getAgent(opt)
      local t = {}
      state = (type(opt.state)=='number') and {opt.state} or opt.state
      t.state = torch.DoubleTensor(state)
-     action = (type(opt.action)=='number') and {opt.action} or action
+     action = (type(opt.action)=='number') and {opt.action} or opt.action
      t.action = torch.DoubleTensor(action)
      t.reward = reward
-     t.nextState = torch.DoubleTensor(nextState)
-     t.terminal = (terminal and 1) or 0
-     --tj.pushTraj(t)
+     t.nextState = torch.DoubleTensor(opt.nextState)
+     t.terminal = (opt.terminal and 1) or 0
      return t
    end
-
+   count = 1
    function reward(opt)
       local terminal = opt.terminal
       opt.action = latestAction
@@ -113,10 +113,13 @@ local function getAgent(opt)
          table.insert(trajs, traj)
          tj.pushTraj(traj)
          traj = {}
-      end
+
       if timestepsTotal >= timestepsPerBatch then
-        learn(trajs, tj)
+        --print(trajs, tj)
+        learn(trajs, tj, opt.nIter)
+         count = count + 1
         resetTrajectories()
+      end
       end
    end
 

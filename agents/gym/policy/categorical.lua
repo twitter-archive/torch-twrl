@@ -4,12 +4,13 @@ local function getPolicy(opt)
   local instance_id = instance_id
   local nStates = opt.nStates
   local model = opt.model
-  print(model)
-  local function selectAction(state)
+
+  local function selectAction(state, actionSampler)
     -- autocast state to a table, to handle cast to tensor
     local state = (type(state) == 'number') and {state} or state
     local obsv = torch.DoubleTensor(state):reshape(1,nStates)
     local out = model:forward(obsv)
+    --print(out)
     local action
     -- Single discrete action space, action selection is based on the sampling of the, softmax probabilities output by the network
     -- Add small probability to prevent NaNs, could contain 0 -> log(0)= -inf -> theta = nans
@@ -18,7 +19,7 @@ local function getPolicy(opt)
       print('Error in action selection')
       print(obsv, out, out:ne(out))
       print('Selecting a random action')
-      action = client:env_action_space_sample(instance_id)
+      action = actionSampler()
     else
       -- Sample action ~ p(s; θ)
       action = (torch.multinomial(out, 1)-1)[1][1]
