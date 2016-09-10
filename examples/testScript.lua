@@ -61,5 +61,11 @@ local agent = {
 local nSteps, nIterations = params.nSteps, params.nIterations
 -- gym data dump directory
 params.outdir = logDir .. '/gym'
+
 -- run test
-local _ = require 'experiment'(env, agent, nSteps, nIterations, params)
+local _ = require '../src/experiment'(env, agent, nSteps, nIterations, params)
+
+
+
+
+

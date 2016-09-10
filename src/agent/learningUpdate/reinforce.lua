@@ -8,6 +8,7 @@ local function getLearningUpdate(opt)
    local stepsizeStart = opt.stepsizeStart
    local policyStd = opt.policyStd
    local nIterations = opt.nIterations
+   local util = require 'rl.util'()
 
 	local function learn(trajs, tj, nIter)
 	--theta, gradTheta = model:getParameters()

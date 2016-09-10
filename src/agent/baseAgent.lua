@@ -1,9 +1,7 @@
 local t  = require 'torch'
 local nn = require 'nn'
 local os = require 'os'
-local tj = require 'rl.trajectory'
-
-print(tj)
+local tj = require 'rl.trajectory'()
 
 local function getAgent(opt)
    local opt = opt or {}
@@ -22,7 +20,7 @@ local function getAgent(opt)
    opt.nHiddenLayerSize = opt.nHiddenLayerSize or 10
    if opt.model then
       local modelName = opt.model
-      model = require 'rl.agent.model.mlp'({
+      model = require('rl.agent.model.mlp')({
         nInputs = envDetails.nbStates,
         nOutputs = envDetails.nbActions,
         nHiddenLayerSize = opt.nHiddenLayerSize}
@@ -30,16 +28,14 @@ local function getAgent(opt)
       print('Model: ' .. modelName)
    end
 
-   print(model)
-
-   policy = require 'rl.agent.policy.categorical'({
+   policy = require('rl.agent.policy.' .. opt.policy)({
      client = opt.client,
      instanceID = instanceID,
      nStates = envDetails.nbStates,
      model = model.model
    })
 
-   local learn = require 'rl.agent.learningUpdate.reinforce'({
+   local learn = require('rl.agent.learningUpdate.' .. opt.learningUpdate)({
      model = model,
      envDetails = envDetails,
      gamma = opt.gamma,

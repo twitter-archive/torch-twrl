@@ -4,7 +4,7 @@ local function getModel(opt)
 	local nOutputs = opt.nOutputs
 	local nHiddenLayerSize = opt.nHiddenLayerSize
 	local outputType = opt.outputType or 'categorical'
-	print(nHiddenLayerSize)
+	-- print(nHiddenLayerSize)
 	local finalLayer = outputType == 'categorical' and nn.SoftMax()
 		or nn.Tanh()
 
@@ -14,7 +14,7 @@ local function getModel(opt)
 		:add(nn.Linear(nHiddenLayerSize, nOutputs))
 		:add(finalLayer)
 
-  print(model)
+   -- print(model)
 	local theta, gradTheta = model:getParameters()
 	local gradThetaSq = torch.Tensor(gradTheta:size()):zero()
 
