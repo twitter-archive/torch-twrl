@@ -1,6 +1,6 @@
 local function experiment(envName, agent, nSteps, nIterations, opt)
-   local gymClient = require('../../util/gym-http-api/binding-lua/gym_http_client')
-   local util = require '../../util/utilities'()
+   local gymClient = require('gym-http-api/binding-lua/gym_http_client')
+   local util = require 'util'()
    local opt = opt or {}
    local base = 'http://127.0.0.1:5000'
    local client = gymClient.new(base)
@@ -12,7 +12,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
    local resume = opt.resume
    local renderAllSteps = opt.renderAllSteps
 
-   local perf = require('../../util/perf')({nIterations = nSteps})
+   local perf = require('perf')({nIterations = nSteps})
    local function run()
       -- Set up the agent given the details about the environment
       client:env_monitor_start(instanceID, outdir, force, resume, video)
@@ -24,7 +24,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
          agentOpt.policy = agent.policy
          agentOpt.learningUpdate = agent.learningUpdate
          agentOpt.envDetails = gum.getStateAndActionSpecs(agentOpt.stateSpace, agentOpt.actionSpace)
-      local agent = require('../../agents/gym/gym_base_agent')(agentOpt)
+      local agent = require('agent/baseAgent')(agentOpt)
 
       local function actionSampler() return client:env_action_space_sample(instanceID) end
 
