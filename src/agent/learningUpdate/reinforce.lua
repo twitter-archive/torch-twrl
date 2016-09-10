@@ -1,5 +1,4 @@
 local function getLearningUpdate(opt)
-   local util = require '../../../util/utilities'()
    local opt = opt or {}
    local modelP = opt.model
    local model = modelP.model
