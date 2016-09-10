@@ -11,7 +11,7 @@ rl.trajectory = require 'rl.trajectory'
 rl.tilecoding = require 'rl.tilecoding'
 
 -- -- Main packages
--- rl.agents.baseAgent = require 'rl.agents.baseAgent'
+rl.agent = require 'rl.agent'
 
 -- -- Agent packages
 -- rl.agents.learningUpdate = require 'rl.agents.learningUpdate'
