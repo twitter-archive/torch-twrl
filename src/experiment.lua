@@ -1,6 +1,6 @@
-local gymClient = require('../../util/gym-http-api/binding-lua/gym_http_client')
-local util = require '../../util/utilities'()
-local function testGym(envName, agent, nSteps, nIterations, opt)
+local function experiment(envName, agent, nSteps, nIterations, opt)
+   local gymClient = require('../../util/gym-http-api/binding-lua/gym_http_client')
+   local util = require '../../util/utilities'()
    local opt = opt or {}
    local base = 'http://127.0.0.1:5000'
    local client = gymClient.new(base)
@@ -69,4 +69,4 @@ local function testGym(envName, agent, nSteps, nIterations, opt)
       print('Error: No server found! Be sure to start a Gym server before running an experiment.')
    end
 end
-return testGym
+return experiment
