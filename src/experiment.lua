@@ -29,16 +29,14 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
 
       local function actionSampler() return client:env_action_space_sample(instanceID) end
 
-      for nIter=1,nIterations do
+      for nIter = 1,nIterations do
           local state = client:env_reset(instanceID)
           perf.reset()
           for i = 1, nSteps do
              local action = agent.selectAction(client, instanceID, state, envDetails, agent)
-
-             -- TODO: clean up this if statement
-             render = render == 'true' and true or false
+             render = renderAllSteps == 'true' and true or false
              nextState, reward, terminal, _ = client:env_step(instanceID, action, render)
-             -- set terminal to true if reached max number of steps
+             -- terminal if reached max number of steps
              if i == nSteps then terminal = true end
              agent.reward({state = state, reward = reward, terminal = terminal, nextState = nextState, nIter = nIter})
              state = nextState
@@ -47,7 +45,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
                state = client:env_reset(instanceID)
             end
           end
-          print(nIter)
+          print('Episode: ' .. nIter)
           print(perf.getSummary())
       end
     

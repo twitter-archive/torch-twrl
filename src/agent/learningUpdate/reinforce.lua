@@ -21,6 +21,7 @@ local function getLearningUpdate(opt)
       allObservations[i] = tj.states[i]
       allActions[i] = tj.actions[i]
    end
+   
    -- For each set of trajectories calculate compute the discounted sum of rewards
    local trajReturns = {}
    local trajNotTerminals = {}
@@ -31,8 +32,8 @@ local function getLearningUpdate(opt)
 
 	-- Compute the baseline
    local baseline = util.getBaseline(trajs, trajLengths, trajReturns, baselineType)
-   -- Compute the advantage function
-   -- Calculate variance-reduced reward (advantage)
+   
+   -- Calculate variance-reduced reward (advantage) function
    local advs = {}
    for i = 1, #trajs do
       advs[i] = trajReturns[i] - baseline[{{1,(#trajReturns[i])[1]}}]

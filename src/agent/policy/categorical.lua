@@ -10,7 +10,6 @@ local function getPolicy(opt)
     local state = (type(state) == 'number') and {state} or state
     local obsv = torch.DoubleTensor(state):reshape(1,nStates)
     local out = model:forward(obsv)
-    --print(out)
     local action
     -- Single discrete action space, action selection is based on the sampling of the, softmax probabilities output by the network
     -- Add small probability to prevent NaNs, could contain 0 -> log(0)= -inf -> theta = nans
