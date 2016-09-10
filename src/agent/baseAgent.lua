@@ -3,6 +3,8 @@ local nn = require 'nn'
 local os = require 'os'
 local tj = require 'rl.trajectory'
 
+print(tj)
+
 local function getAgent(opt)
    local opt = opt or {}
    local envDetails = opt.envDetails
