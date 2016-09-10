@@ -1,7 +1,7 @@
 local function getPolicy(opt)
   local opt = opt or {}
   local client = opt.client
-  local instance_id = instance_id
+  local instanceID = instanceID
   local nStates = opt.nStates
   local model = opt.model
 

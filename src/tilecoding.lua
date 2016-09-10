@@ -1,5 +1,4 @@
--- Based on tilecoding Version3
--- https://webdocs.cs.ualberta.ca/~sutton/tiles/tiles3.html
+-- Based on tilecoding Version3 from https://webdocs.cs.ualberta.ca/~sutton/tiles/tiles3.html
 local function tilecoding(opt)
    -- Set a random seed for consistent hashing
    math.randomseed(65597)

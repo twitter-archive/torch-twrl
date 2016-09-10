@@ -1,5 +1,5 @@
 local function getLearningUpdate(opt)
-   local gum = require '../../../util/gym_utilities'()
+   local util = require '../../../util/utilities'()
    local opt = opt or {}
    local modelP = opt.model
    local model = modelP.model
@@ -26,11 +26,11 @@ local function getLearningUpdate(opt)
    local trajNotTerminals = {}
    local trajLengths = torch.Tensor(#trajs):zero()
    for i = 1, #trajs do
-      trajLengths[i], trajReturns[i], trajNotTerminals[i] = gum.discount(trajs[i],gamma)
+      trajLengths[i], trajReturns[i], trajNotTerminals[i] = util.discount(trajs[i],gamma)
    end
 
 	-- Compute the baseline
-   local baseline = gum.getBaseline(trajs, trajLengths, trajReturns, baselineType)
+   local baseline = util.getBaseline(trajs, trajLengths, trajReturns, baselineType)
    -- Compute the advantage function
    -- Calculate variance-reduced reward (advantage)
    local advs = {}
@@ -45,7 +45,7 @@ local function getLearningUpdate(opt)
    	-- Do the policy gradient update step
 	local N = allObservations:size(1)
 	local output = model:forward(allObservations)
-	local advantagesNormalized = gum.whiten(allAdvantages)
+	local advantagesNormalized = util.whiten(allAdvantages)
 
 	stepsize = stepsizeStart * ((nIterations - nIter) / nIterations)
    -- Calculate (negative of) gradient of entropy of policy (for gradient descent): -(-logp(s) - 1)

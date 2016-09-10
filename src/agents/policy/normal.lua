@@ -1,4 +1,4 @@
-local function selectAction(client, instance_id, state, envDetails, agent)
+local function selectAction(client, instanceID, state, envDetails, agent)
    -- autocast state to a table, to handle cast to tensor
    local state = (type(state)=='number') and {state} or state
    local obsv = torch.DoubleTensor(state):reshape(1,envDetails.nbStates)

@@ -1,18 +1,18 @@
-local function selectAction(client, instance_id, state, envDetails, agent)
+local function selectAction(client, instanceID, state, envDetails, agent)
 	local action
 	if math.random() < agent.epsilon then
 		-- Sample a random action from the environment
-		action = client:env_action_space_sample(instance_id)
+		action = client:env_action_space_sample(instanceID)
 		-- reset eligibility traces
 		local _ = agent.model.resetEligibility()
 	else
+		-- get the maximizing action
 		local Q = agent.model.estimateAllQ(state)
 		local maxQ, maxIdx = Q:max(1)
-		-- get the maximizing action
-		-- actions are defined as [1,nbActions] in Lua, but [0,nbActions-1] in python
-		-- need to make sure that this is accounted for
+		-- actions are defined as [1,nbActions] in agent, but [0,nbActions-1] in environments
 		action = maxIdx[1] - 1
-		e = agent.model.e * agent.gamma * agent.lambda
+		-- decay the eligibility traces
+		agent.model.e = agent.model.e * agent.gamma * agent.lambda
 	end
    -- Decay epsilon on each action selection
    if agent.epsilon > agent.epsilonMinValue then

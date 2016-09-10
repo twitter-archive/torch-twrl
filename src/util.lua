@@ -1,7 +1,7 @@
-local function gym_utilities()
+local function utilities()
    local eps = 1e-20
-   local gu = {}
-   function gu.getStateAndActionSpecs(stateSpec, actionSpec)
+   local util = {}
+   function util.getStateAndActionSpecs(stateSpec, actionSpec)
       -- Get environment specifications in case they are needed
       local nbStates, nbStatesDiscrete
       if stateSpec['name'] == 'Discrete' then
@@ -44,7 +44,7 @@ local function gym_utilities()
       }
       return envDetails
    end
-   function gu.discount(traj, gamma)
+   function util.discount(traj, gamma)
       -- Given a trajectory, computes a discounted return such that
       -- y[i] = x[i] + gamma * x[i+1] + gamma^2 x[i+2] + ..
       local trajReturn = torch.Tensor(#traj)
@@ -57,7 +57,7 @@ local function gym_utilities()
       end
       return #traj, trajReturn, trajNotTerminal
    end
-   function gu.getBaseline(trajs, trajLengths, trajReturns, baselineType)
+   function util.getBaseline(trajs, trajLengths, trajReturns, baselineType)
       local maxLength = trajLengths:max()
       local paddedReturns = torch.DoubleTensor(#trajs,maxLength):zero()
       -- Compute the time dependent baseline
@@ -72,9 +72,9 @@ local function gym_utilities()
       end
       return paddedReturns:mean(1):t():squeeze()
    end
-   function gu.whiten(advantages)
+   function util.whiten(advantages)
       return (advantages - advantages:mean())/(advantages:std() + eps)
    end
-   return gu
+   return util
 end
-return gym_utilities
+return utilities

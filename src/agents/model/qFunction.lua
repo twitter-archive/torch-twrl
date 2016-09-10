@@ -4,7 +4,7 @@ local function model(numInputs, numOutputs, agent)
 		local stateMins = agent.envDetails.stateSpec.low
 		local stateScalingFactor = {}
 		for i = 1, nbStates do
-			if agent.envDetails.stateSpec.low[i] and agent.envDetails.stateSpec.high[i] then
+			if (agent.envDetails.stateSpec.low[i] and agent.envDetails.stateSpec.high[i]) and (agent.envDetails.stateSpec.high[i] < 1000) then
             stateScalingFactor[i] = (agent.envDetails.stateSpec.high[i] - agent.envDetails.stateSpec.low[i]) / agent.numTilings
          else
             stateScalingFactor[i] = 1/agent.numTilings
@@ -22,11 +22,19 @@ local function model(numInputs, numOutputs, agent)
    }
    local tc = require '../../../util/tilecoding'(tcOpt)
    local nbActions = agent.envDetails.nbActions
-   local w = torch.FloatTensor(tcOpt.numTilings * tcOpt.memorySize * nbActions):zero():fill(agent.initialWeightVal)
-   local e = torch.FloatTensor(tcOpt.numTilings * tcOpt.memorySize * nbActions):zero()
    Q = {}
-   Q.w = w
-   Q.e = e
+   Q.w = torch.FloatTensor(tcOpt.numTilings * tcOpt.memorySize * nbActions):zero():fill(agent.initialWeightVal)
+   Q.e = torch.FloatTensor(tcOpt.numTilings * tcOpt.memorySize * nbActions):zero()
+   function Q.getFeatures(state, action)
+      -- get features indecies of Q(s,a) given state and action
+      -- featurize the state with the given tilecoder
+      local obsv = tc.feature(state)
+      local featIdx = {}
+      for tiling = 1,tcOpt.numTilings do
+         featIdx[tiling] = obsv[tiling] + (action * tcOpt.numTilings * tcOpt.memorySize) + 1
+      end
+      return featIdx
+   end
    function Q.accumulateEligibility(state, action)
       local featIdx = Q.getFeatures(state, action)
       -- accumulate eligibility for all features present in s,a
@@ -41,19 +49,6 @@ local function model(numInputs, numOutputs, agent)
    function Q.resetEligibility()
       return Q.e:fill(0)
    end
-	function Q.observe(state)
-      -- featurize the state with the given tilecoder
-		return tc.feature(state)
-   end
-   function Q.getFeatures(state, action)
-      -- get features indecies of Q(s,a) given state and action
-      local obsv = Q.observe(state)
-      local featIdx = {}
-      for tiling = 1,tcOpt.numTilings do
-         featIdx[tiling] = obsv[tiling] + (action * tcOpt.numTilings * tcOpt.memorySize) + 1
-      end
-      return featIdx
-   end
    function Q.estimateQ(state, action)
       -- sum weights for Q(s,a) for single action
       local featIdx = Q.getFeatures(state, action)
@@ -66,8 +61,9 @@ local function model(numInputs, numOutputs, agent)
    function Q.estimateAllQ(state)
       -- estimate Q(s,a) for all actions
       local qVals = torch.Tensor(nbActions):zero()
-      for a = 0, nbActions-1 do
-         qVals[a+1] = Q.estimateQ(state, a)
+      -- actions are base 0 for environment simplicity
+      for action = 0, nbActions-1 do
+         qVals[action+1] = Q.estimateQ(state, action)
       end
       return qVals
    end
