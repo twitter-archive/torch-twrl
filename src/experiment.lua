@@ -45,7 +45,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
                state = client:env_reset(instanceID)
             end
           end
-          print('Episode: ' .. nIter)
+          print('Iteration: ' .. nIter)
           print(perf.getSummary())
       end
     

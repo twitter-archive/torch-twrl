@@ -18,7 +18,7 @@ local params = lapp[[
    -g, --gradClip           	(default 5)                   	Maximum absolute value of gradients (for reinforce learning update)
    -b, --baselineType			(default "zeroBaseline")			Type of baseline for advantage calculation ("zeroBaseline" or "padTimeDepAvReturn")
    -w, --weightDecay          (default 0.9)                   	Optimization parameter: weight decay
-   -a, --beta           		(default 0.01)                   Optimization parameter: Regularization parameter for RMSProp
+   -a, --beta           		(default 0.01)                   Entropy for forced exploration
    -d, --uploadResults        (default false)                  Automatically upload results to gym leaderboard
    --epsilon                  (default 0.1)                    Epsilon-greedy probability of a random action
    --epsilonDecayRate         (default 0.999)                  Epsilon decay rate
@@ -63,7 +63,7 @@ local nSteps, nIterations = params.nSteps, params.nIterations
 params.outdir = logDir .. '/gym'
 
 -- run test
-local _ = require '../src/experiment'(env, agent, nSteps, nIterations, params)
+local _ = require 'src/experiment'(env, agent, nSteps, nIterations, params)
 
 
 

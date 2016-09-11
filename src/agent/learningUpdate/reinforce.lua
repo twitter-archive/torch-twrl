@@ -43,14 +43,20 @@ local function getLearningUpdate(opt)
       allAdvantages = torch.cat(allAdvantages, advs[i+1])
    end
 
-   	-- Do the policy gradient update step
 	local N = allObservations:size(1)
-	local output = model:forward(allObservations)
+	
+   local output = model:forward(allObservations)
+
+   -- whiten the advantages to balance rewards
 	local advantagesNormalized = util.whiten(allAdvantages)
 
+   -- decrement the step size, helps with convergence 
 	stepsize = stepsizeStart * ((nIterations - nIter) / nIterations)
+   
    -- Calculate (negative of) gradient of entropy of policy (for gradient descent): -(-logp(s) - 1)
-	local gradEntropy = torch.log(output) - 1
+   -- add small constant to avoid nans
+   output:add(1e-10)
+	local gradEntropy = torch.log(output) + 1
 
  	--- REINFORCE update for discrete (Reinforce Categorical) and continuous actions (Reinforce Normal)
    local targets = torch.DoubleTensor(N,envDetails.nbActions):zero()
@@ -61,9 +67,9 @@ local function getLearningUpdate(opt)
       -- ------------ =
       --     d p          0         otherwise
       ----------------------------------------
-   for i = 1, N do
-     targets[i][allActions[i][1]+1] = advantagesNormalized[i] * 1/(output[i][allActions[i][1]+1])
-   end
+      for i = 1, N do
+         targets[i][allActions[i][1]+1] = advantagesNormalized[i] * 1/(output[i][allActions[i][1]+1])
+      end
    elseif envDetails.actionType == 'Box' then
       ----------------------------------------
       -- Derivative of log normal w.r.t. mean:
@@ -71,22 +77,21 @@ local function getLearningUpdate(opt)
       -- -------------- = -------
       --      d u           s^2
       ----------------------------------------
-      targets = torch.DoubleTensor(N,envDetails.nbActionSpace):zero()
-    for i = 1, N do
-      targets[i] = ((output[i] - allActions[i])/(policyStd^2)) * advantagesNormalized[i]
+      for i = 1, N do
+         targets[i] = ((output[i] - allActions[i])/(policyStd^2)) * advantagesNormalized[i]
+      end
     end
-    end
-    --print(advantagesNormalized)
+
     -- Add to gradEntropy to targets to improve exploration and prevent convergence to potentially suboptimal deterministic policy
-    targets:add(gradEntropy * opt.beta)
+    targets:add(opt.beta, gradEntropy)
     model:backward(allObservations, targets)
     modelP.gradThetaSq = modelP.gradThetaSq * opt.weightDecay + torch.pow(modelP.gradTheta, 2) * (1 - opt.weightDecay)
     if opt.gradClip > 0 then
       modelP.gradTheta:clamp(-opt.gradClip, opt.gradClip)
     end
     -- tune the stepsize down as learning continues
-    -- print('Step size ' .. stepsize)
-    modelP.theta:add(torch.cdiv(modelP.gradTheta * stepsize, torch.sqrt(modelP.gradThetaSq) + 1e-20))
+    print('Step size ' .. stepsize)
+    modelP.theta:add(torch.cdiv(modelP.gradTheta * stepsize, torch.sqrt(modelP.gradThetaSq) + 1e-10))
 	end
 	return learn
 end

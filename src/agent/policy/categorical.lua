@@ -17,6 +17,7 @@ local function getPolicy(opt)
     if out:ne(out):sum() > 0 then
       print('Error in action selection')
       print(obsv, out, out:ne(out))
+      os.exit()
       print('Selecting a random action')
       action = actionSampler()
     else
