@@ -35,6 +35,7 @@ local params = lapp[[
    --criticLearningRate       (default 0.0001)                 DDPG - critic network learning rate
    --tau                      (default 0.001)                  DDPG - soft target update parameter
    --bufferSize               (default 10000)                  DDPG - buffer size
+   --windowSize               (default 100)                    Performance metric window size
 ]]
 
 -- Get time, build log folder

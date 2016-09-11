@@ -42,8 +42,8 @@ local function perf(opt)
     local summary = {
        windowSize = windowSize,
        numTrajectories = #trajs,
-       meanLengthLastN = meanLength,
-       meanRewardLastN = meanReward,
+       meanLengthOverWindowSize = meanLength,
+       meanRewardOverWindowSize = meanReward,
        maxLength = episodeLengths:max(),
        maxReward = episodeRewards:max(),
     }

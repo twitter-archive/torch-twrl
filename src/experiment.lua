@@ -13,7 +13,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
    local renderAllSteps = opt.renderAllSteps
    local render = renderAllSteps == 'true' and true or false
 
-   local perf = require 'rl.perf'({nIterations = nSteps})
+   local perf = require 'rl.perf'({nIterations = nSteps, windowSize = opt.windowSize})
    local function run()
       -- Set up the agent given the details about the environment
       client:env_monitor_start(instanceID, outdir, force, resume, video)
