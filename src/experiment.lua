@@ -52,7 +52,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
       client:env_monitor_close(instanceID)
 
       if opt.uploadResults == 'true' then
-         print('upload')
+         print('Uploading results, check server for URL: ')
          -- Upload to the scoreboard, with env OPENAI_GYM_API_KEY set
          client:upload(outdir)
       end
