@@ -91,7 +91,7 @@ local function getLearningUpdate(opt)
        end
        modelP.theta:add(torch.cdiv(modelP.gradTheta * stepsize, torch.sqrt(modelP.gradThetaSq) + 1e-10))
        -- Print some learning update details
-       print('Learning update: ' .. nIter)
+       print('Learning update at episode: ' .. nIter)
        print('Step size: ' .. stepsize)
        print('Number of episodes in learning batch: ' .. numEps)
        print('Number of steps in learning batch: ' .. numSteps)

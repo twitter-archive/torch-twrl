@@ -38,24 +38,21 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
             nextState, reward, terminal, _ = client:env_step(instanceID, action, render)
             if i == nSteps then terminal = true end
             perf.addReward(nIter, reward, terminal)
-            
             nextAction = agent.selectAction(client, instanceID, nextState, envDetails, agent)
-            
             agent.reward({state = state, action = action, reward = reward, nextState = nextState, nextAction = nextAction, terminal = terminal, nIter = nIter})
-            
-            -- prepare for next transition
+            -- update state and action
             state = nextState
             action = nextAction
             if terminal then break end
          end
-         print('Iteration: ' .. nIter)
          print(perf.getSummary())
       end
     
       -- Dump result info to disk
       client:env_monitor_close(instanceID)
 
-      if opt.uploadResults == true then
+      if opt.uploadResults == 'true' then
+         print('upload')
          -- Upload to the scoreboard, with env OPENAI_GYM_API_KEY set
          client:upload(outdir)
       end
