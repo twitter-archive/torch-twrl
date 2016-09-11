@@ -80,6 +80,7 @@ local function getAgent(opt)
    
    function reward(opt)
       local terminal = opt.terminal
+      -- build the transition
       local t = addTrajectory(opt)
       -- add the current transition to the current trajectory
       table.insert(traj, t)

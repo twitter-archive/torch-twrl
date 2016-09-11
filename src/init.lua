@@ -8,7 +8,6 @@ rl.LICENSE = 'MIT'
 rl.agent = require 'rl.agent'
 rl.util = require 'rl.util'
 rl.perf = require 'rl.perf'
-rl.trajectory = require 'rl.trajectory'
 rl.tilecoding = require 'rl.tilecoding'
 rl.experiment = require 'rl.experiment'
 

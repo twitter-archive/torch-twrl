@@ -89,7 +89,8 @@ local function getLearningUpdate(opt)
          modelP.gradTheta:clamp(-opt.gradClip, opt.gradClip)
        end
        -- tune the stepsize down as learning continues
-       print('Step size ' .. stepsize)
+       print('Step size: ' .. stepsize)
+       print('Batch size: ' .. N)
        modelP.theta:add(torch.cdiv(modelP.gradTheta * stepsize, torch.sqrt(modelP.gradThetaSq) + 1e-10))
 	end
 	return learn

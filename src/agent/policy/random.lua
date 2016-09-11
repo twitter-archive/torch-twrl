@@ -1,5 +1,7 @@
-local function selectAction(client, instanceID, state, envDetails, agent)
-   -- Sample a random action from the environment
-   return client:env_action_space_sample(instanceID)
+local function getPolicy(opt)
+	local function selectAction(state, actionSampler)
+      return actionSampler()
+   end
+   return selectAction
 end
-return selectAction
+return getPolicy

@@ -1,4 +1,4 @@
-local function model(numInputs, numOutputs, nHiddenLayerSize)
+local function getModel(opt)
    return false
 end
-return model
+return getModel
