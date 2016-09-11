@@ -21,24 +21,6 @@ local function perf(opt)
   end
 
   local function getSummary()
-    -- local episodeRewards = torch.Tensor(windowSize):zero()
-    -- local lastNEpisodeRewards = torch.Tensor(windowSize):zero()
-    -- local lastNEpisodeLengths = torch.Tensor(windowSize):zero()
-    
-    -- -- get last 10 episode rewards and lengths
-    -- local count = 1
-    -- for i=#trajs,1,-1 do
-    --   for j = #trajs[i],1, -1 do
-    --     if count > 10 then break end
-    --     local episode = trajs[i][j]
-    --     local length = #episode
-    --     local rewardSum = mo.reduce(episode, function(a, v) return a + v end)
-    --     lastNEpisodeLengths[count] = length
-    --     lastNEpisodeRewards[count] = rewardSum
-    --     count = count + 1
-    --   end
-    -- end
-   
       local episodeRewards = torch.Tensor(#trajs):zero()
       local episodeLengths = torch.Tensor(#trajs):zero()
       for i = 1,#trajs do
@@ -48,14 +30,20 @@ local function perf(opt)
          end
       end
 
+      local meanLength = 0
+      local meanReward = 0
+      local maxLength, maxReward
+
+      if #trajs > windowSize then
+         meanLength = episodeRewards[{{#trajs-windowSize,#trajs}}][1]
+         meanReward = episodeRewards[{{#trajs-windowSize,#trajs}}][1]
+      end
+
     local summary = {
-       -- maxLength = lastNEpisodeLengths:max(),
-       -- meanLength = lastNEpisodeLengths:mean(),
-       -- maxReward = lastNEpisodeRewards:max(),
-       -- meanReward = lastNEpisodeRewards:mean()
+       windowSize = windowSize,
        numTrajectories = #trajs,
-       meanLength = episodeLengths:mean(),
-       meanReward = episodeRewards:mean(),
+       meanLengthLastN = meanLength,
+       meanRewardLastN = meanReward,
        maxLength = episodeLengths:max(),
        maxReward = episodeRewards:max(),
     }
