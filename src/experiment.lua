@@ -48,12 +48,12 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
          print(perf.getSummary())
       end
     
-      -- Dump result info to disk
+      -- Dump result info to disk and close the Gym monitor
       client:env_monitor_close(instanceID)
 
       if opt.uploadResults == 'true' then
          print('Uploading results, check server for URL: ')
-         -- Upload to the scoreboard, with env OPENAI_GYM_API_KEY set
+         -- Upload to the scoreboard, OPENAI_GYM_API_KEY must be set
          client:upload(outdir)
       end
       return true

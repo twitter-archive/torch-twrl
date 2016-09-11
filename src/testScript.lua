@@ -64,8 +64,3 @@ params.outdir = logDir .. '/gym'
 
 -- run test
 local _ = require 'src/experiment'(env, agent, nSteps, nIterations, params)
-
-
-
-
-

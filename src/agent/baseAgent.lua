@@ -8,11 +8,6 @@ local function getAgent(opt)
    local envDetails = opt.envDetails
    local timestepsPerBatch = opt.timestepsPerBatch or 10
 
-   -- local latestAction
-   -- local latestState
-   -- local previousAction
-   -- local previousState
-
    local model
    local policy
    local learningUpdate
@@ -50,10 +45,7 @@ local function getAgent(opt)
 
    function selectAction(client, instanceID, state)
       local actionSampler = function () return client:env_action_space_sample(instanceID) end
-      local action = policy(state, actionSampler)
-      -- previousAction = latestAction
-      -- latestAction = action
-      return action
+      return policy(state, actionSampler)
    end
 
    local timestepsTotal = 0
