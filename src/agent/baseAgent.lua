@@ -1,17 +1,17 @@
 local t  = require 'torch'
 local nn = require 'nn'
 local os = require 'os'
-local tj = require 'rl.trajectory'()
+-- local tj = require 'rl.trajectory'()
 
 local function getAgent(opt)
    local opt = opt or {}
    local envDetails = opt.envDetails
    local timestepsPerBatch = opt.timestepsPerBatch or 10
 
-   local latestAction
-   local latestState
-   local previousAction
-   local previousState
+   -- local latestAction
+   -- local latestState
+   -- local previousAction
+   -- local previousState
 
    local model
    local policy
@@ -51,20 +51,17 @@ local function getAgent(opt)
    function selectAction(client, instanceID, state)
       local actionSampler = function () return client:env_action_space_sample(instanceID) end
       local action = policy(state, actionSampler)
-      previousAction = latestAction
-      latestAction = action
+      -- previousAction = latestAction
+      -- latestAction = action
       return action
    end
 
    local timestepsTotal = 0
-   local trajCount = 1
    local trajs = {}
    local traj = {}
 
    function resetTrajectories()
-     local _ = tj.clearTrajs()
      timestepsTotal = 0
-     trajCount = 1
      trajs = {}
      traj = {}
    end
@@ -80,23 +77,23 @@ local function getAgent(opt)
      t.terminal = (opt.terminal and 1) or 0
      return t
    end
-   count = 1
+   
    function reward(opt)
       local terminal = opt.terminal
-      opt.action = latestAction
       local t = addTrajectory(opt)
+      -- add the current transition to the current trajectory
       table.insert(traj, t)
       if terminal then
-         timestepsTotal = timestepsTotal + #traj
+         -- episode is over, add current trajectory to full list 
          table.insert(trajs, traj)
-         tj.pushTraj(traj)
+         timestepsTotal = timestepsTotal + #traj
+         -- clear the episode trajectory table
          traj = {}
-
-      if timestepsTotal >= timestepsPerBatch then
-        learn(trajs, tj, opt.nIter)
-         count = count + 1
-        resetTrajectories()
       end
+      -- learn when we have enough trajectories
+      if timestepsTotal >= timestepsPerBatch then
+         learn(trajs, opt.nIter)
+         resetTrajectories()
       end
    end
    return {

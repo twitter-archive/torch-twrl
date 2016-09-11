@@ -3,4 +3,4 @@
 clear
 echo "Testing REINFORCE on CartPole Environment"
 echo "*************************************************"
-th testScript.lua -env 'CartPole-v0' -policy categorical -learningUpdate reinforce -model singleHiddenLayerCategorical -nSteps 1000 -nIterations 200 -timestepsPerBatch 600 -stepsizeStart 0.4 -gamma 1 -nHiddenLayerSize 8 -video 50 -gradClip 6 -baselineType padTimeDepAvReturn -renderAllSteps false -beta 0.001 -weightDecay 0.8
+th testScript.lua -env 'MountainCar-v0' -policy categorical -learningUpdate reinforce -model singleHiddenLayerCategorical -nSteps 1000 -nIterations 500 -timestepsPerBatch 1000 -stepsizeStart 0.3 -gamma 1 -nHiddenLayerSize 10 -video 0 -gradClip 5 -baselineType padTimeDepAvReturn -renderAllSteps true -beta 0.01 -weightDecay 0.9

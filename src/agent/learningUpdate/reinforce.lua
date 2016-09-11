@@ -8,18 +8,17 @@ local function getLearningUpdate(opt)
    local stepsizeStart = opt.stepsizeStart
    local policyStd = opt.policyStd
    local nIterations = opt.nIterations
+   local mo = require 'moses'
    local util = require 'rl.util'()
 
-	local function learn(trajs, tj, nIter)
-      --theta, gradTheta = model:getParameters()
-      -- Learn on the large set of timesteps in memory
-      -- Concatenate the observations
-      local numSteps = #tj.states
+	local function learn(trajs, nIter)
+      local allTransitions = mo.flatten(trajs, true)
+      local numSteps = #allTransitions
       local allObservations = torch.DoubleTensor(numSteps, envDetails.nbStates):zero()
       local allActions = torch.DoubleTensor(numSteps, 1):zero()
       for i = 1, numSteps do
-         allObservations[i] = tj.states[i]
-         allActions[i] = tj.actions[i]
+         allObservations[i] = allTransitions[i].state
+         allActions[i] = allTransitions[i].action
       end
 
       -- For each set of trajectories calculate compute the discounted sum of rewards

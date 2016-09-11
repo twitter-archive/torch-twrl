@@ -12,7 +12,8 @@ local function getPolicy(opt)
       local out = model:forward(obsv)
       local action
       -- Single discrete action space, action selection
-      -- based on the sampling of the, softmax probabilities output by the network
+      -- sample softmax probabilities output by the network
+      -- if any NaNs, sample an action
       if out:ne(out):sum() > 0 then
          print('Error in action selection, selecting randomly')
          print(obsv, out, out:ne(out))
