@@ -13,14 +13,14 @@ description = {
    license = "MIT"
 }
 dependencies = {
-   "lua ~> 5.1",
+   "lua >= 5.1",
    "torch >= 7.0",
-   "tds ~> scm-1",
-   "nn ~> scm-1",
-   "penlight ~> 1.4.1",
-   "httpclient ~> 0.1.0",
-   "dkjson ~> 2.5",
-   "moses ~> 1.4.0" 
+   "tds >= scm-1",
+   "nn >= scm-1",
+   "penlight >= 1.4.1",
+   "httpclient >= 0.1.0",
+   "dkjson >= 2.5",
+   "moses >= 1.4.0" 
 }
 build = {
    type = "command",

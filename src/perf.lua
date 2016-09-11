@@ -9,7 +9,6 @@ local function perf(opt)
 
   local function reset()
     traj = {}
-    --episodeRewards:zero()
   end
 
   local function addReward(nIter, reward, terminal)
@@ -43,9 +42,9 @@ local function perf(opt)
       local episodeRewards = torch.Tensor(#trajs):zero()
       local episodeLengths = torch.Tensor(#trajs):zero()
       for i = 1,#trajs do
-         episodeLengths[i] = #trajs[i]
-         for j = 1,#trajs[i] do
-            episodeRewards[i] = episodeRewards[i] + trajs[i][j][1]
+         episodeLengths[i] = #trajs[i][1]
+         for j = 1,#trajs[i][1] do
+            episodeRewards[i] = episodeRewards[i] + trajs[i][1][j]
          end
       end
 
