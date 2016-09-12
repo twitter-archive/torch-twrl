@@ -6,21 +6,20 @@ source = {
 description = {
    summary = "Reinforcement Learning for Torch and Lua",
    detailed = [[
-      This is an example for the LuaRocks tutorial.
-      Here we would put a detailed, typically
-      paragraph-long description.
+      torch-rl is a Reinforcement Learning framework
+      built for Torch. It interfaces with OpenAI Gym.
    ]],
    homepage = "https://github.com/twitter/torch-rl",
    license = "MIT"
 }
 dependencies = {
-   "lua ~> 5.1",
+   "lua >= 5.1",
    "torch >= 7.0",
-   "tds",
-   "nn",
-   "penlight ~> 1.4.1",
-   "httpclient ~> 0.1.0",
-   "dkjson ~> 2.5"
+   "nn >= scm-1",
+   "penlight >= 1.4.1",
+   "httpclient >= 0.1.0",
+   "dkjson >= 2.5",
+   "moses >= 1.4.0" 
 }
 build = {
    type = "command",

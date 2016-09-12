@@ -5,9 +5,10 @@ torch-rl is an RL framework built in Lua/Torch by Twitter.
 Installation
 ------------
 
-Grab torch-rl from the git repository, you should have everything you need to run local tests (./testing/local/run_tests.sh)
+Grab torch-rl from the git repository, you should have everything you need start testing:
 
 git clone
+luarocks install torch
 luarocks make
 
 Want to play in the gym?
