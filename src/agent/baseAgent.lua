@@ -23,7 +23,7 @@ local function getAgent(opt)
       print('Model: ' .. modelName)
    end
 
-   policy = require('rl.agent.policy.' .. opt.policy)({
+   policy = require('rl.agent.policy')[opt.policy]({
      client = opt.client,
      instanceID = instanceID,
      nStates = envDetails.nbStates,
@@ -69,7 +69,7 @@ local function getAgent(opt)
      t.terminal = (opt.terminal and 1) or 0
      return t
    end
-   
+
    function reward(opt)
       local terminal = opt.terminal
       -- build the transition
@@ -77,7 +77,7 @@ local function getAgent(opt)
       -- add the current transition to the current trajectory
       table.insert(traj, t)
       if terminal then
-         -- episode is over, add current trajectory to full list 
+         -- episode is over, add current trajectory to full list
          table.insert(trajs, traj)
          timestepsTotal = timestepsTotal + #traj
          -- clear the episode trajectory table
