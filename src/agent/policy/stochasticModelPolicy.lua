@@ -10,12 +10,11 @@ local function getStochasticModelPolicy(opt)
       local model = opt.model.net
       local actionShift = opt.actionShift
 
-      local function selectAction(state, actionSampler)
+      local function selectAction(state)
          -- autocast state to a table, to handle cast to tensor
          local state = (type(state) == 'number') and {state} or state
          local obsv = torch.DoubleTensor(state):reshape(1,nStates)
          local out = model:forward(obsv)
-
          return actionSampler(out, {actionShift = actionShift})
       end
       return selectAction
