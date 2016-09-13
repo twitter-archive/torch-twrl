@@ -16,10 +16,10 @@ local function getLearningUpdate(opt)
    local params, gradParams = net:getParameters()
 
    local optimConfig = {
-    learningRate = -stepsizeStart,
-    alpha = opt.optimAlpha,
-    weightDecay = opt.weightDecay,
-    epsilon = smallEps
+      learningRate = -stepsizeStart,
+      alpha = opt.optimAlpha,
+      weightDecay = opt.weightDecay,
+      epsilon = smallEps
    }
 
 	local function learn(trajs, nIter)
