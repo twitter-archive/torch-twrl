@@ -9,8 +9,8 @@ local function getLearningUpdate(opt)
    local gradClip = opt.gradClip
    local optim = require 'optim'
    local mo = require 'moses'
-   local util = require 'rl.util'()
-   local smallEps = 1e-8
+   local util = require 'rl.agent.learningUpdate.util'
+   local smallEps = util.smallEps
    local model = opt.model
    local net = model.net
    local params, gradParams = net:getParameters()
