@@ -26,7 +26,7 @@ local function getAgent(opt)
       })
    end
 
-   policy = require('rl.agent.policy.' .. opt.policy)({
+   policy = require('rl.agent.policy')[opt.policy]({
      client = opt.client,
      instanceID = instanceID,
      nStates = envDetails.nbStates,
@@ -84,7 +84,7 @@ local function getAgent(opt)
      t.terminal = (opt.terminal and 1) or 0
      return t
    end
-   
+
    function reward(opt)
       local transition = opt
       -- TODO: decompose batch/iterative for simplicity
