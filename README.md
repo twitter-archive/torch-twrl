@@ -1,4 +1,5 @@
-# torch-rl: Reinforcement Learning in Torch
+torch-rl: Reinforcement Learning in Torch
+=========================================
 
 torch-rl is an RL framework built in Lua/Torch by Twitter.
 
@@ -7,19 +8,22 @@ Installation
 
 Grab torch-rl from the git repository, you should have everything you need start testing:
 
+```
 git clone
 luarocks install torch
 luarocks make
+```
 
 Want to play in the gym?
 ------------------------
+
 * Start a virtual environment (not necessary but helps keep everything clean)
 * Download and install OpenAI gym (https://github.com/openai/gym)
 * Download gym-http-api (https://github.com/korymath/gym-http-api) to the (/util/) folder in torch-rl
 * Test the gym-http-api with nose2 (go to /util/gym-http-api and run nose2)
 * Test the gym-http-api binding-lua (/util/gym-http-api/binding-lua/test_api.lua)
 
-Works so far? 
+Works so far?
 
 You should have everything you need to run gym tests:
 
@@ -29,10 +33,11 @@ You should have everything you need to run gym tests:
 
 Dependencies
 ------------
+
 This library is compatible with the OpenAI Gym with the use of the modified Gym HTTI API (located in /testing/gym-http-api), based on the original code from OpenAI.
 
 There are several Torch dependencies for torch-rl:
-torch, tds, nn, autograd, penlight, httpclient, dkjson 
+torch, tds, nn, autograd, penlight, httpclient, dkjson
 
 Testing
 -------
@@ -45,6 +50,7 @@ Example
 -------
 
 To run an agent in an OpenAI environment you will need to:
+
 1. start a Gym HTTP server by runnning /util/gym-http-api/gym_http_server.py
 2. once the server is started you can run a test script /testing/gym/run_tests.sh (make sure that the shell file is executable: chmod u+x run_tests.sh, then run with ./run_tests.sh)
 3. in this testscript you can specify environment, agent, and parameters
@@ -56,13 +62,13 @@ Link: https://gym.openai.com/evaluations/eval_9wwlxNWeTOWaFJcwioF0zQ
 
 It was generated with the following code:
 
-~~~~
-th test_gym.lua -env 'CartPole-v0' 
--policy categorical -learningUpdate reinforce 
--nSteps 1000 -nIterations 200 -model singleHiddenLayerCategorical -timestepsPerBatch 1000 
--stepsizeStart 0.3 -gamma 1 -nHiddenLayerSize 10 -video 5 -gradClip 5 
--baselineType padTimeDepAvReturn
-~~~~
+```
+th test_gym.lua -env 'CartPole-v0'
+  -policy categorical -learningUpdate reinforce
+  -nSteps 1000 -nIterations 200 -model singleHiddenLayerCategorical -timestepsPerBatch 1000
+  -stepsizeStart 0.3 -gamma 1 -nHiddenLayerSize 10 -video 5 -gradClip 5
+  -baselineType padTimeDepAvReturn
+```
 
 Code Structure
 --------------
@@ -72,35 +78,37 @@ The torch-rl directory structure is laid out as follows:
 * local - agents for testing local environments
 * gym - agents for testing gym environments
 * envs - local environments
-* testing - framework and scripts for testing 
+* testing - framework and scripts for testing
 * gym - gym specific testing
 * experiment_gym.lua - framework for gym testing
-run_tests.sh - bash script for running multiple gym tests
-test_gym.lua - main testing function for gym tests
-local - local specific testing
-experiment_local.lua - framework for local testing 
-run_tests.sh - bash script for running multiple local tests
-test_local.lua - main testing function for local tests
-util
-gym_utilities.lua - gym agent and environment supplementary functions, also contains baseline calculations
-tilecoding.lua - function approximation, based on TileCoding-v3 from Rich Sutton
-trajectory.lua - for storing trajectories in batch training methods
-index.rst - general README for the project
- 
+* run_tests.sh - bash script for running multiple gym tests
+* test_gym.lua - main testing function for gym tests
+* local - local specific testing
+* experiment_local.lua - framework for local testing
+* run_tests.sh - bash script for running multiple local tests
+* test_local.lua - main testing function for local tests
+* gym_utilities.lua - gym agent and environment supplementary functions, also contains baseline calculations
+* tilecoding.lua - function approximation, based on TileCoding-v3 from Rich Sutton
+* trajectory.lua - for storing trajectories in batch training methods
+* index.rst - general README for the project
+
 ## Agents
 
 torch-rl implements several agents, they are located in /agents:
 
 ### Gym agents
+
 * Random
 * TD(Lambda) - implements temporal difference learning with eligibility traces
 * Q-learning and SARSA-learning
 * Eligibility traces can be replacing or accumulating
 * REINFORCE [Williams, 1992] implements vanilla policy gradient
+
 ** For continuous action spaces, a normal policy is used
 ** For discrete action spaces, a categorical policy is used
 
 ### Local agents, for the local environments:
+
 * randomDiscrete.lua - Random agent which handles discrete environments
 * sarsa.lua - tabular on-policy SARSA, for 1D or 2D discrete state spaces
 * sarsaLambda.lua - linear function approximation on-policy SARSA, with eligibility traces
@@ -115,14 +123,17 @@ Here is a useful table of the environments, with details on the different variab
 ## Environments
 
 ### Local environments
+
 torch-rl includes several local environments for testing, they are located in /envs.
 
 ### OpenAI Gym environments
+
 The OpenAI gym has many environments, agents may be compatible with only a subset.
 Here is a table of the environments, with details on the different variables therein https://github.com/openai/gym/wiki/Table-of-environments. It will help you configure your agents appropriately.
 
 Future Work
 -----------
+
 * Autograd Integration for automatic policy differentiation
 * Actor-Critic Policy Gradient
 * Cross Entropy Method
@@ -136,7 +147,8 @@ Future Work
 * True Online TD (van Seijen, Sutton 2014 [PDF])
 
 References
---------------
+----------
+
 1. Boyan, J., & Moore, A. W. (1995). Generalization in reinforcement learning: Safely approximating the value function. Advances in neural information processing systems, 369-376.
 2. Sutton, R. S. (1988). Learning to predict by the methods of temporal differences. Machine learning, 3(1), 9-44.
 3. Singh, S. P., & Sutton, R. S. (1996). Reinforcement learning with replacing eligibility traces. Machine learning, 22(1-3), 123-158.
