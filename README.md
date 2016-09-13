@@ -104,8 +104,8 @@ torch-rl implements several agents, they are located in /agents:
 * Eligibility traces can be replacing or accumulating
 * REINFORCE [Williams, 1992] implements vanilla policy gradient
 
-** For continuous action spaces, a normal policy is used
-** For discrete action spaces, a categorical policy is used
+    * For continuous action spaces, a normal policy is used
+    * For discrete action spaces, a categorical policy is used
 
 ### Local agents, for the local environments:
 
