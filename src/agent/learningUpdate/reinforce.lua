@@ -14,8 +14,6 @@ local function getLearningUpdate(opt)
    local model = opt.model
    local net = model.net
    local params, gradParams = net:getParameters()
-   local gradParamsSq = torch.Tensor():resizeAs(gradParams):fill(0)
-   local tmp = torch.Tensor():resizeAs(gradParams)
 
    local optimConfig = {
     learningRate = -stepsizeStart,
@@ -109,7 +107,7 @@ local function getLearningUpdate(opt)
       
       optimConfig.learningRate = stepsizeStart * ((nIterations - nIter)) / nIterations
       optimConfig.learningRate = mo.max({optimConfig.learningRate, 0.05})
-      local params, newObj = optim.rmsprop(feval, params, optimConfig)
+      local params, newObj = optim.adam(feval, params, optimConfig)
 
       -- Print some learning update details
       print('Learning update at episode: ' .. nIter)

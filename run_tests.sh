@@ -6,7 +6,7 @@ echo "*************************************************"
 
 # th testScript.lua -env 'MountainCar-v0' -policy random -learningUpdate noLearning -model noModel -nSteps 1000 -nIterations 500 -timestepsPerBatch 1000 -video 200 -renderAllSteps true
 
-# cartpole example https://gym.openai.com/evaluations/eval_48l1nOQ7ur6htkF9uGw
+# # cartpole example https://gym.openai.com/evaluations/eval_48l1nOQ7ur6htkF9uGw
 th testScript.lua -env 'CartPole-v0' \
 	-policy categorical -learningUpdate reinforce \
    -model mlp -optimAlpha 0.9 \
