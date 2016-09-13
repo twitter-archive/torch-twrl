@@ -15,11 +15,11 @@ description = {
 dependencies = {
    "lua >= 5.1",
    "torch >= 7.0",
-   "nn >= scm-1",
+   "nn >= 1.0.4",
    "penlight >= 1.4.1",
    "httpclient >= 0.1.0",
    "dkjson >= 2.5",
-   "moses >= 1.4.0" 
+   "moses >= 1.4.0"
 }
 build = {
    type = "command",
