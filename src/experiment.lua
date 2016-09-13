@@ -31,6 +31,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
       local function actionSampler() return client:env_action_space_sample(instanceID) end
 
       for nIter = 1,nIterations do
+         collectgarbage()
          perf.reset()
          local state = client:env_reset(instanceID)
          local action = agent.selectAction(client, instanceID, state)

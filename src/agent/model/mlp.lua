@@ -7,20 +7,14 @@ local function getModel(opt)
 	local finalLayer = outputType == 'categorical' and nn.SoftMax()
 		or nn.Tanh()
 
-	local model = nn.Sequential()
+	local net = nn.Sequential()
 		:add(nn.Linear(nInputs, nHiddenLayerSize))
 		:add(nn.Tanh())
 		:add(nn.Linear(nHiddenLayerSize, nOutputs))
 		:add(finalLayer)
-		
-	local theta, gradTheta = model:getParameters()
-	local gradThetaSq = torch.Tensor(gradTheta:size()):zero()
 
 	return {
-		model = model,
-		theta = theta,
-		gradTheta = gradTheta,
-		gradThetaSq = gradThetaSq
+		net = net 
 	}
 end
 

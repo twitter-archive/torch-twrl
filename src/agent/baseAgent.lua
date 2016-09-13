@@ -51,7 +51,8 @@ local function getAgent(opt)
      weightDecay = opt.weightDecay,
      nIterations = opt.nIterations,
      numTilings = opt.numTilings,
-     relativeAlpha = opt.relativeAlpha
+     relativeAlpha = opt.relativeAlpha,
+     optimAlpha = opt.optimAlpha
    })
 
    function selectAction(client, instanceID, state)
