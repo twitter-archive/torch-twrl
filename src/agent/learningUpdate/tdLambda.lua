@@ -1,21 +1,40 @@
-local function learn(state, action, reward, nextState, nextAction, terminal, agent)
-   -- Random agent learns nothing
-   local delta = 0
-   if terminal then
-      local _ = agent.model.resetEligibility()
-   else
-      local _ = agent.model.accumulateEligibility(state, action)
-      -- Q-Learning
-      if agent.tdLearnUpdate == 'qLearning' then
-         local Q = agent.model.estimateAllQ(nextState)
-         local maxQ, maxIdx = Q:max(1)
-         delta = reward - agent.model.estimateQ(state, action) + (agent.gamma * maxQ[1])
-      -- SARSA
-      elseif agent.tdLearnUpdate == 'SARSA' then
-         local Q = agent.model.estimateQ(nextState, nextAction)
-         delta = reward - agent.model.estimateQ(state, action) + (agent.gamma * Q)
-      end
-      agent.model.w = agent.model.w + (agent.model.e * agent.alpha * delta)
+local function getLearningUpdate(opt)
+   local opt = opt or {}
+   local model = opt.model
+   local envDetails = opt.envDetails
+   local tdLearnUpdate = opt.tdLearnUpdate
+   local gamma = opt.gamma
+   local alpha = opt.stepsizeStart
+   local relativeAlpha = opt.relativeAlpha
+   local numTilings = opt.numTilings
+   if relativeAlpha ~= 0 then
+      alpha = relativeAlpha / numTilings
    end
+
+   local function learn(transition, nIter)
+      local state = transition.state
+      local action = transition.action
+      local reward = transition.reward
+      local nextState = transition.nextState
+      local nextAction = transition.nextAction
+      local terminal = transition.terminal
+
+      local delta = 0
+      if terminal == true then
+         model.eligibility:zero()
+      else
+         model.accumulateEligibility(state, action, model.eligibility)
+         if tdLearnUpdate == 'qLearning' then
+            local qVals = model.estimateAllQ(nextState, model.weights)
+            local maxQ, maxIdx = qVals:max(1)
+            delta = reward - model.estimateQ(state, action, model.weights) + gamma * maxQ[1]
+         elseif tdLearnUpdate == 'SARSA' then
+            local qVal = model.estimateQ(nextState, nextAction, model.weights)
+            delta = reward - model.estimateQ(state, action, model.weights) + gamma * qVal
+         end
+         model.weights = model.weights + model.eligibility * alpha * delta
+      end
+   end
+   return learn
 end
-return learn
+return getLearningUpdate

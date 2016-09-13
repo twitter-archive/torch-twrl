@@ -9,20 +9,10 @@ local function getPolicy(opt)
       -- autocast state to a table, to handle cast to tensor
       local state = (type(state) == 'number') and {state} or state
       local obsv = torch.DoubleTensor(state):reshape(1,nStates)
-      local out = model:forward(obsv)
-      local action
-      -- Single discrete action space, action selection
-      -- sample softmax probabilities output by the network
-      -- if any NaNs, sample an action
-      if out:ne(out):sum() > 0 then
-         print('Error in action selection, selecting randomly')
-         print(obsv, out, out:ne(out))
-         action = actionSampler()
-      else
-         -- Sample action ~ p(s; θ)
-         action = (torch.multinomial(out, 1)-1)[1][1]
-      end
-      return action
+      local out = model.net:forward(obsv)
+      out = torch.exp(out)
+      -- Sample action from distribution ~ p(s; θ) 
+      return (torch.multinomial(out, 1)-1)[1][1]
    end
    return selectAction
 end

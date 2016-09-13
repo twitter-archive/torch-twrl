@@ -17,7 +17,8 @@ local params = lapp[[
    -h, --nHiddenLayerSize		(default 10)                   	Number of hidden layers (for singleHiddenLayer models)
    -g, --gradClip           	(default 5)                   	Maximum absolute value of gradients (for reinforce learning update)
    -b, --baselineType			(default "zeroBaseline")			Type of baseline for advantage calculation ("zeroBaseline" or "padTimeDepAvReturn")
-   -w, --weightDecay          (default 0.9)                   	Optimization parameter: weight decay
+   -w, --weightDecay          (default 0)                   	Optimization parameter: weight decay
+   --optimAlpha               (default 0.9)                    Optimization parameter (RMSProp) alpha, smoothing constant
    -a, --beta           		(default 0.01)                   Entropy for forced exploration
    -d, --uploadResults        (default false)                  Automatically upload results to gym leaderboard
    --epsilon                  (default 0.1)                    Epsilon-greedy probability of a random action
@@ -25,7 +26,7 @@ local params = lapp[[
    --epsilonMinValue          (default 0.0001)                 Epsilon minimum value
    --numTiles                 (default 32)                     tilecoding: number of tiles
    --numTilings               (default 4)                      tilecoding: number of overlapping tilings
-   --alphaScaleFactor         (default 0)                      tilecoding: alpha scaling
+   --relativeAlpha            (default 0)                      tilecoding: alpha scaling
    --learningType             (default "batch")                Whether the agent learns in 'batch' or 'noBatch'
    --lambda                   (default 0.9)                    Eligibility trace decay
    --initialWeightVal         (default -0.01)                  Initial linear function approximation weights

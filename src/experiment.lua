@@ -31,14 +31,15 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
       local function actionSampler() return client:env_action_space_sample(instanceID) end
 
       for nIter = 1,nIterations do
+         collectgarbage()
          perf.reset()
          local state = client:env_reset(instanceID)
-         local action = agent.selectAction(client, instanceID, state, envDetails, agent)
+         local action = agent.selectAction(client, instanceID, state)
          for i = 1, nSteps do
             nextState, reward, terminal, _ = client:env_step(instanceID, action, render)
             if i == nSteps then terminal = true end
             perf.addReward(nIter, reward, terminal)
-            nextAction = agent.selectAction(client, instanceID, nextState, envDetails, agent)
+            nextAction = agent.selectAction(client, instanceID, nextState)
             agent.reward({state = state, action = action, reward = reward, nextState = nextState, nextAction = nextAction, terminal = terminal, nIter = nIter})
             -- update state and action
             state = nextState
@@ -52,7 +53,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
       client:env_monitor_close(instanceID)
 
       if opt.uploadResults == 'true' then
-         print('Uploading results, check server for URL: ')
+         print('Uploading results, check server for URL.')
          -- Upload to the scoreboard, OPENAI_GYM_API_KEY must be set
          client:upload(outdir)
       end
