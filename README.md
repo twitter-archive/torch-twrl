@@ -46,7 +46,7 @@ th testScript.lua -env 'CartPole-v0' \
 	-uploadResults true -renderAllSteps false
 ~~~
 	
-Your results should look something [our results from the OpenAI Gym leaderboard](https://gym.openai.com/evaluations/eval_9wwlxNWeTOWaFJcwioF0zQ):
+Your results should look something [our results from the OpenAI Gym leaderboard](https://gym.openai.com/evaluations/eval_48l1nOQ7ur6htkF9uGw)
 
 Doesn't work?
 ------------------------
