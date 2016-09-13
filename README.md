@@ -1,12 +1,9 @@
 # torch-rl: Reinforcement Learning in Torch
-
 torch-rl is an RL framework built in Lua/Torch by Twitter.
 
 Installation
 ------------
-
-Grab torch-rl from the git repository, you should have everything you need start testing:
-
+Clone from the repository, and install torch-rl:
 ~~~~~
 git clone --recursive https://github.com/twitter/torch-rl.git
 cd torch-rl
@@ -16,132 +13,99 @@ luarocks make
 Want to play in the gym?
 ------------------------
 1) Start a virtual environment (not necessary but helps keep everything clean)
-2) Download and install OpenAI gym (https://github.com/openai/gym)
-3) Test the gym-http-api with nose2 (go to /util/gym-http-api and run nose2)
-4) Test the gym-http-api binding-lua (/util/gym-http-api/binding-lua/test_api.lua)
+2) Download and install [OpenAI Gym](https://github.com/openai/gym)
+~~~
+virtualenv venv
+pip install gym
+~~~
 
 Works so far? 
 ------------------------
-You should have everything you need to run gym tests:
-* Activate your virtual environment
+You should have everything you need:
 * Start your gym_http_server with 
 ~~~~
-python gym_http_server.py
+python src/gym-http-server/gym_http_server.py
 ~~~~
 
-* Run the testing script
-
+* In a new console window (or tab), run the example script (policy gradient agent in environment CartPole-v0)
 ~~~
+chmod u+x run_tests.sh
 ./run_tests.sh
 ~~~
 
+This script sets parameters for the experiment, in detail here is what it is calling:
+
+~~~
+th testScript.lua -env 'CartPole-v0' \
+	-policy categorical -learningUpdate reinforce \
+	-model mlp -optimAlpha 0.9 \
+ -timestepsPerBatch 1000 -stepsizeStart 0.3 -gamma 1 \
+	-nHiddenLayerSize 10 -gradClip 5 -baselineType padTimeDepAvReturn \
+	-beta 0.01 -weightDecay 0 -windowSize 100 \
+ -nSteps 1000 -nIterations 1000 -video 0 \
+	-uploadResults true -renderAllSteps false
+~~~
+	
+Your results should look something [our results from the OpenAI Gym leaderboard](https://gym.openai.com/evaluations/eval_9wwlxNWeTOWaFJcwioF0zQ):
+
+Doesn't work?
+------------------------
+1) Test the gym-http-api
+~~~~
+cd /src/gym-http-api/
+nose2
+~~~~
+
+2) Start a Gym HTTP server in your virtual environment
+~~~~
+python src/gym-http-api/gym_http_server.py
+~~~~
+
+3) In a new console window (or tab), run torch-rl tests
+~~~~
+luarocks make; th test/test.lua
+~~~~
+
 Dependencies
 ------------
-This library is compatible with the OpenAI Gym with the use of the modified Gym HTTI API (located in /testing/gym-http-api), based on the original code from OpenAI.
+Testing of RL development is a tricky endeavor, it requires well established, unified, baselines and a large community of active developers. The OpenAI Gym provides a great set of example environments for this purpose. Link: https://github.com/openai/gym
 
-There are several Torch dependencies for torch-rl:
-torch, tds, nn, autograd, penlight, httpclient, dkjson 
+The OpenAI Gym is written in python and it expects algorithms which interact with its various environments to be as well. torch-rl is compatible with the OpenAI Gym with the use of a modified Gym HTTP API, based on the original code from OpenAI; [gym-http-api](https://github.com/korymath/gym-http-api) is a submodule of torch-rl.
 
-Testing
--------
+All Lua dependencies should be installed on your first build.
 
-Testing of RL algorithms is a tricky endeavor, it requires well established, unified, baselines and a large community of active developers. The OpenAI Gym provides a great set of example environments for testing algorithm development. Link: https://github.com/openai/gym
-
-The OpenAI Gym is written in python and it expects algorithms which interact with its various environments to be as well. The gym-http-api which allows for the API to access OpenAI Gym from other languages via HTTP. Link: https://github.com/korymath/gym-http-api
-
-Example
--------
-
-To run an agent in an OpenAI environment you will need to:
-1. start a Gym HTTP server by runnning /util/gym-http-api/gym_http_server.py
-2. once the server is started you can run a test script /testing/gym/run_tests.sh (make sure that the shell file is executable: chmod u+x run_tests.sh, then run with ./run_tests.sh)
-3. in this testscript you can specify environment, agent, and parameters
-4. alternatively, you can call the test script directly from command line with " th test_gym.lua "
-
-Here is an example run of REINFORCE on CartPole
-
-Link: https://gym.openai.com/evaluations/eval_9wwlxNWeTOWaFJcwioF0zQ
-
-It was generated with the following code:
-
+Note: if you make changes, you will need to recompile with
 ~~~~
-th test_gym.lua -env 'CartPole-v0' 
--policy categorical -learningUpdate reinforce 
--nSteps 1000 -nIterations 200 -model singleHiddenLayerCategorical -timestepsPerBatch 1000 
--stepsizeStart 0.3 -gamma 1 -nHiddenLayerSize 10 -video 5 -gradClip 5 
--baselineType padTimeDepAvReturn
+luarocks make
 ~~~~
 
-Code Structure
---------------
-The torch-rl directory structure is laid out as follows:
-
-* agents - contains all the RL agents in torch-rl
-* local - agents for testing local environments
-* gym - agents for testing gym environments
-* envs - local environments
-* testing - framework and scripts for testing 
-* gym - gym specific testing
-* experiment_gym.lua - framework for gym testing
-run_tests.sh - bash script for running multiple gym tests
-test_gym.lua - main testing function for gym tests
-local - local specific testing
-experiment_local.lua - framework for local testing 
-run_tests.sh - bash script for running multiple local tests
-test_local.lua - main testing function for local tests
-util
-gym_utilities.lua - gym agent and environment supplementary functions, also contains baseline calculations
-tilecoding.lua - function approximation, based on TileCoding-v3 from Rich Sutton
-trajectory.lua - for storing trajectories in batch training methods
-index.rst - general README for the project
- 
 ## Agents
+torch-rl implements several agents, they are located in src/agents. Agents are defined by a model, policy, and learning update.
 
-torch-rl implements several agents, they are located in /agents:
-
-### Gym agents
 * Random
-* TD(Lambda) - implements temporal difference learning with eligibility traces
-* Q-learning and SARSA-learning
-* Eligibility traces can be replacing or accumulating
-* REINFORCE [Williams, 1992] implements vanilla policy gradient
-** For continuous action spaces, a normal policy is used
-** For discrete action spaces, a categorical policy is used
+* TD(Lambda) - implements temporal difference (Q-learning or SARSA) learning with eligibility traces (replacing or accumulating)
+* REINFORCE [Williams, 1992] implements policy gradient:
+	* Normal policy for continuous action spaces
+	* Categorical policy for discrete action spaces
 
-### Local agents, for the local environments:
-* randomDiscrete.lua - Random agent which handles discrete environments
-* sarsa.lua - tabular on-policy SARSA, for 1D or 2D discrete state spaces
-* sarsaLambda.lua - linear function approximation on-policy SARSA, with eligibility traces
-* qLambda.lua - linear function approximation off-policy Q-learning, with eligibility traces
+## Important note about agent/environment compatibility:
+The OpenAI Gym has many environments and is continuously growing. Some agents may be compatible with only a subset of environments. That is, an agent built for continuous action space environments may not work if the environment expects discrete action spaces. 
 
-## Note on OpenAI Gym environments:
-
-The OpenAI Gym has many environments and is continuously growing
-Some agents may be compatible with only a subset (agent built for continuous action space environments may not work if the environment expects discrete action spaces)
-Here is a useful table of the environments, with details on the different variables that may help to configure agents appropriately.
-
-## Environments
-
-### Local environments
-torch-rl includes several local environments for testing, they are located in /envs.
-
-### OpenAI Gym environments
-The OpenAI gym has many environments, agents may be compatible with only a subset.
-Here is a table of the environments, with details on the different variables therein https://github.com/openai/gym/wiki/Table-of-environments. It will help you configure your agents appropriately.
+[Here is a useful table of the environments](https://github.com/openai/gym/wiki/Table-of-environments), with details on the different variables that may help to configure agents appropriately.
 
 Future Work
 -----------
-* Autograd Integration for automatic policy differentiation
-* Actor-Critic Policy Gradient
+* Automatic policy differentiation with [Autograd](https://github.com/twitter/torch-autograd)
+* Additional baselines for advantage function computation
 * Cross Entropy Method
-* Parallel workers for random environment sampling
-* A3C
-* DDPG - Link1
-* TRPO
-* PAL
-* Bayesian RL - more background
-* Expected SARSA (van Seijen 2009 [PDF])
-* True Online TD (van Seijen, Sutton 2014 [PDF])
+* Parallel random environment sampling
+* [Deep Q Learning (DQN)](http://arxiv.org/abs/1312.5602)
+* [Double DQN](http://arxiv.org/abs/1509.06461)
+* [Asynchronous Advantage Actor-Critic (A3C)](https://arxiv.org/pdf/1602.01783v2.pdf)
+* [Deep Deterministic Policy Gradient (DDPG)](http://arxiv.org/abs/1509.02971)
+* [Trust Region Policy Optimization (TRPO)](https://arxiv.org/pdf/1502.05477v4.pdf)
+* [Expected SARSA](http://www.cs.ox.ac.uk/people/shimon.whiteson/pubs/vanseijenadprl09.pdf)
+* [True Online TD](https://webdocs.cs.ualberta.ca/~sutton/papers/vSS-trueonline-ICML-2014.pdf)
 
 References
 --------------
