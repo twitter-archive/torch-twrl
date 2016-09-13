@@ -7,25 +7,33 @@ Installation
 
 Grab torch-rl from the git repository, you should have everything you need start testing:
 
-git clone
-luarocks install torch
+~~~~~
+git clone --recursive https://github.com/twitter/torch-rl.git
+cd torch-rl
 luarocks make
+~~~~~
 
 Want to play in the gym?
 ------------------------
-* Start a virtual environment (not necessary but helps keep everything clean)
-* Download and install OpenAI gym (https://github.com/openai/gym)
-* Download gym-http-api (https://github.com/korymath/gym-http-api) to the (/util/) folder in torch-rl
-* Test the gym-http-api with nose2 (go to /util/gym-http-api and run nose2)
-* Test the gym-http-api binding-lua (/util/gym-http-api/binding-lua/test_api.lua)
+1) Start a virtual environment (not necessary but helps keep everything clean)
+2) Download and install OpenAI gym (https://github.com/openai/gym)
+3) Test the gym-http-api with nose2 (go to /util/gym-http-api and run nose2)
+4) Test the gym-http-api binding-lua (/util/gym-http-api/binding-lua/test_api.lua)
 
 Works so far? 
-
+------------------------
 You should have everything you need to run gym tests:
-
 * Activate your virtual environment
-* Start your gym_http_server with python gym_http_server.py
-* Run the testing script: (./testing/gym/run_tests.sh)
+* Start your gym_http_server with 
+~~~~
+python gym_http_server.py
+~~~~
+
+* Run the testing script
+
+~~~
+./run_tests.sh
+~~~
 
 Dependencies
 ------------
