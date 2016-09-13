@@ -8,3 +8,4 @@ FILE(GLOB luasrc src/*.lua)
 ADD_TORCH_PACKAGE(rl "" "${luasrc}")
 
 INSTALL(DIRECTORY "src/agent" DESTINATION "${Torch_INSTALL_LUA_PATH_SUBDIR}/rl")
+INSTALL(DIRECTORY "src/gym-http-api/binding-lua" DESTINATION "${Torch_INSTALL_LUA_PATH_SUBDIR}/rl")
