@@ -7,7 +7,7 @@ local function getStochasticModelPolicy(opt)
       local client = opt.client
       local instanceID = instanceID
       local nStates = opt.nStates
-      local model = opt.model
+      local model = opt.model.net
       local actionShift = opt.actionShift
 
       local function selectAction(state, actionSampler)
