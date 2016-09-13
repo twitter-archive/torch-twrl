@@ -1,23 +1,31 @@
-local function selectAction(client, instanceID, state, envDetails, agent)
-	local action
-	if math.random() < agent.epsilon then
-		-- Sample a random action from the environment
-		action = client:env_action_space_sample(instanceID)
-		-- reset eligibility traces
-		local _ = agent.model.resetEligibility()
-	else
-		-- get the maximizing action
-		local Q = agent.model.estimateAllQ(state)
-		local maxQ, maxIdx = Q:max(1)
-		-- actions are defined as [1,nbActions] in agent, but [0,nbActions-1] in environments
-		action = maxIdx[1] - 1
-		-- decay the eligibility traces
-		agent.model.e = agent.model.e * agent.gamma * agent.lambda
-	end
-   -- Decay epsilon on each action selection
-   if agent.epsilon > agent.epsilonMinValue then
-      agent.epsilon = agent.epsilon * agent.epsilonDecayRate
+local function getPolicy(opt)
+   local opt = opt or {}
+   local client = opt.client
+   local instanceID = instanceID
+   local nStates = opt.nStates
+   local model = opt.model
+   local epsilon = opt.epsilon
+   local gamma = opt.gamma
+   local lambda = opt.lambda
+   local epsilonMinValue = opt.epsilonMinValue
+   local epsilonDecayRate = opt.epsilonDecayRate
+
+   local function selectAction(state, actionSampler)
+   	local action
+   	if math.random() < epsilon then
+   		action = actionSampler()
+   		model.eligibility:zero()
+   	else
+   		local qVals = model.estimateAllQ(state, model.weights)
+   		local maxQ, maxIdx = qVals:max(1)
+   		action = maxIdx[1] - 1
+         model.eligibility = model.eligibility * gamma * lambda
+   	end
+   	if epsilon > epsilonMinValue then
+   		epsilon = epsilon * epsilonDecayRate
+   	end
+   	return action
    end
-	return action
+   return selectAction
 end
-return selectAction
+return getPolicy
