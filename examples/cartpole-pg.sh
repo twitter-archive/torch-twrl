@@ -8,9 +8,9 @@ th run.lua \
 	-env 'CartPole-v0' \
 	-policy categorical \
 	-learningUpdate reinforce \
-  -model mlp \
+   -model mlp \
 	-optimAlpha 0.9 \
-  -timestepsPerBatch 1000 \
+   -timestepsPerBatch 1000 \
 	-stepsizeStart 0.3 -gamma 1 \
 	-nHiddenLayerSize 10 \
 	-gradClip 5 \
@@ -18,7 +18,7 @@ th run.lua \
 	-beta 0.01 \
 	-weightDecay 0 \
 	-windowSize 100 \
-  -nSteps 1000 \
+   -nSteps 1000 \
 	-nIterations 1000 \
 	-video 0 \
 	-uploadResults true \
