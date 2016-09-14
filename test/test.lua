@@ -138,7 +138,7 @@ function experiment.randomNoLearningNoModel()
 end
 
 tester:add(base)
--- tester:add(api)
+tester:add(api)
 tester:add(performance)
 tester:add(tilecoding)
 tester:add(experiment)
