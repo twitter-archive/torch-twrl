@@ -95,7 +95,7 @@ Agents are defined by a model, policy, and learning update.
 	* model: qFunction
 	* policy: [egreedy](https://github.com/twitter/torch-rl/blob/master/src/agent/policy/egreedy.lua)
 	* learningUpdate: tdLambda - implements temporal difference (Q-learning or SARSA) learning with eligibility traces (replacing or accumulating)
-* __Policy Gradient__ [Williams, 1992]:
+* __Policy Gradient__ [Williams, 1992](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf):
 	* model: mlp - multilayer perceptron, final layeer: tanh for continuous, softmax for discrete
 	* policy: normal for continuous actions, categorical for discrete
 	* learningUpdate: reinforce
