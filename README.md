@@ -96,16 +96,16 @@ The OpenAI Gym has many environments and is continuously growing. Some agents ma
 Future Work
 -----------
 * Automatic policy differentiation with [Autograd](https://github.com/twitter/torch-autograd)
-* Additional baselines for advantage function computation
-* Cross Entropy Method
 * Parallel random environment sampling
+* [Additional baselines for advantage function computation](https://arxiv.org/pdf/1301.2315.pdf)
+* [Cross Entropy Method (CEM)](https://people.smp.uq.edu.au/DirkKroese/ps/aortut.pdf)
 * [Deep Q Learning (DQN)](http://arxiv.org/abs/1312.5602)
 * [Double DQN](http://arxiv.org/abs/1509.06461)
 * [Asynchronous Advantage Actor-Critic (A3C)](https://arxiv.org/pdf/1602.01783v2.pdf)
 * [Deep Deterministic Policy Gradient (DDPG)](http://arxiv.org/abs/1509.02971)
 * [Trust Region Policy Optimization (TRPO)](https://arxiv.org/pdf/1502.05477v4.pdf)
-* [Expected SARSA](http://www.cs.ox.ac.uk/people/shimon.whiteson/pubs/vanseijenadprl09.pdf)
-* [True Online TD](https://webdocs.cs.ualberta.ca/~sutton/papers/vSS-trueonline-ICML-2014.pdf)
+* [Expected-SARSA](http://www.cs.ox.ac.uk/people/shimon.whiteson/pubs/vanseijenadprl09.pdf)
+* [True Online-TD](https://webdocs.cs.ualberta.ca/~sutton/papers/vSS-trueonline-ICML-2014.pdf)
 
 References
 --------------
