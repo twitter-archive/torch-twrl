@@ -9,11 +9,12 @@ local function getPolicy(opt)
    local lambda = opt.lambda
    local epsilonMinValue = opt.epsilonMinValue
    local epsilonDecayRate = opt.epsilonDecayRate
+   local randomActionSampler = opt.randomActionSampler
 
-   local function selectAction(state, actionSampler)
+   local function selectAction(state)
    	local action
    	if math.random() < epsilon then
-   		action = actionSampler()
+   		action = randomActionSampler()
    		model.eligibility:zero()
    	else
    		local qVals = model.estimateAllQ(state, model.weights)
