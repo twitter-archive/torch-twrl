@@ -87,16 +87,16 @@ luarocks make
 torch-rl implements several agents, they are located in src/agents. 
 Agents are defined by a model, policy, and learning update.
 
-* Random
-	* model:
-	* policy:
-	* learningUpdate: 
-* TD(Lambda)
+* __Random__
+	* model: noModel
+	* policy: [random](https://github.com/twitter/torch-rl/blob/master/src/agent/policy/random.lua)
+	* learningUpdate: noLearning 
+* __TD(Lambda)__
 	* model: qFunction
-	* policy: egreedy
+	* policy: [egreedy](https://github.com/twitter/torch-rl/blob/master/src/agent/policy/egreedy.lua)
 	* learningUpdate: tdLambda - implements temporal difference (Q-learning or SARSA) learning with eligibility traces (replacing or accumulating)
-* Policy Gradient [Williams, 1992]:
-	* model: mlp
+* __Policy Gradient__ [Williams, 1992]:
+	* model: mlp - multilayer perceptron, final layeer: tanh for continuous, softmax for discrete
 	* policy: normal for continuous actions, categorical for discrete
 	* learningUpdate: reinforce
 	
