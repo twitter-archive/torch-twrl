@@ -9,6 +9,7 @@ local function perf(opt)
 
   local function reset()
     traj = {}
+    return traj
   end
 
   local function addReward(nIter, reward, terminal)
@@ -18,6 +19,7 @@ local function perf(opt)
       table.insert(trajs[nIter], traj)
       traj = {}
     end
+    return traj, trajs
   end
 
   local function getSummary()
