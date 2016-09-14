@@ -108,7 +108,7 @@ The OpenAI Gym has many environments and is continuously growing. Some agents ma
 Future Work
 -----------
 * Automatic policy differentiation with [Autograd](https://github.com/twitter/torch-autograd)
-* Parallel random environment sampling
+* Parallel batch sampling
 * [Additional baselines for advantage function computation](https://arxiv.org/pdf/1301.2315.pdf)
 * [Cross Entropy Method (CEM)](https://people.smp.uq.edu.au/DirkKroese/ps/aortut.pdf)
 * [Deep Q Learning (DQN)](http://arxiv.org/abs/1312.5602)
