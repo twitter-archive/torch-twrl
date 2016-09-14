@@ -14,8 +14,9 @@ luarocks make
 
 Want to play in the gym?
 ------------------------
-1) Start a virtual environment (not necessary but helps keep everything clean)
+1) Start a virtual environment, not necessary but helps keep everything clean
 2) Download and install [OpenAI Gym](https://github.com/openai/gym)
+
 ~~~
 virtualenv venv
 pip install gym
@@ -82,14 +83,22 @@ luarocks make
 ~~~~
 
 ## Agents
-torch-rl implements several agents, they are located in src/agents. Agents are defined by a model, policy, and learning update.
+torch-rl implements several agents, they are located in src/agents. 
+Agents are defined by a model, policy, and learning update.
 
 * Random
-* TD(Lambda) - implements temporal difference (Q-learning or SARSA) learning with eligibility traces (replacing or accumulating)
-* REINFORCE [Williams, 1992] implements policy gradient:
-	* Normal policy for continuous action spaces
-	* Categorical policy for discrete action spaces
-
+	* model:
+	* policy:
+	* learningUpdate: 
+* TD(Lambda)
+	* model: qFunction
+	* policy: egreedy
+	* learningUpdate: tdLambda - implements temporal difference (Q-learning or SARSA) learning with eligibility traces (replacing or accumulating)
+* Policy Gradient [Williams, 1992]:
+	* model: mlp
+	* policy: normal for continuous actions, categorical for discrete
+	* learningUpdate: reinforce
+	
 ## Important note about agent/environment compatibility:
 The OpenAI Gym has many environments and is continuously growing. Some agents may be compatible with only a subset of environments. That is, an agent built for continuous action space environments may not work if the environment expects discrete action spaces. 
 
