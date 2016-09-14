@@ -1,7 +1,7 @@
 local function getPolicy(opt)
-	local function selectAction(state, actionSampler)
-		print(actionSampler)
-      return actionSampler()
+	local randomActionSampler = opt.randomActionSampler
+	local function selectAction(state)
+      return randomActionSampler()
    end
    return selectAction
 end

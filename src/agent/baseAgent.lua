@@ -10,6 +10,7 @@ local function getAgent(opt)
    local model
    local policy
    local learningUpdate
+   local randomActionSampler = opt.randomActionSampler
 
    opt.nHiddenLayerSize = opt.nHiddenLayerSize or 10
    if opt.model then
@@ -36,7 +37,8 @@ local function getAgent(opt)
      epsilonDecayRate = opt.epsilonDecayRate,
      gamma = opt.gamma,
      lambda = opt.lambda,
-     std = opt.policyStd
+     std = opt.policyStd,
+     randomActionSampler = randomActionSampler
    })
 
    local learn = require('rl.agent.learningUpdate.' .. opt.learningUpdate)({

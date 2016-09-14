@@ -26,9 +26,9 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
          agentOpt.learningUpdate = agent.learningUpdate
          agentOpt.envDetails = util.getStateAndActionSpecs(agentOpt.stateSpace, agentOpt.actionSpace)
       
-      local agent = require 'rl.agent.baseAgent'(agentOpt)
+      function agentOpt.randomActionSampler() return client:env_action_space_sample(instanceID) end
 
-      local function actionSampler() return client:env_action_space_sample(instanceID) end
+      local agent = require 'rl.agent.baseAgent'(agentOpt)
 
       for nIter = 1,nIterations do
          collectgarbage()
