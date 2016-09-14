@@ -8,7 +8,6 @@ rl.LICENSE = 'MIT'
 rl.agent = require 'rl.agent'
 rl.util = require 'rl.util'
 rl.perf = require 'rl.perf'
-rl.tilecoding = require 'rl.tilecoding'
 rl.experiment = require 'rl.experiment'
 rl.gymClient = require 'rl.binding-lua.gym_http_client'
 

@@ -5,7 +5,7 @@ local function tilecoding(opt)
 	local numTilings = opt.numTilings
 	local scaleFactor = opt.scaleFactor
 	local memorySize = opt.memorySize
-   local stateMins = opt.stateMins
+   local stateMins = opt.stateMins or {}
    local sizeVal = opt.sizeVal or 2048
 	local maxLongInteger = 2147483647
 	local maxLongIntegerBy4 = math.floor(maxLongInteger/4)
