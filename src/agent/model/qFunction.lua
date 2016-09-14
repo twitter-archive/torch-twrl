@@ -24,7 +24,7 @@ local function getModel(opt)
    local stateScalingFactor, stateMins = getStateMinsAndScaling(envDetails, numTilings)
    local memorySize = numTiles * numTiles
    
-   local tc = require 'rl.tilecoding'({numTilings = numTilings, memorySize = memorySize, scaleFactor = stateScalingFactor, stateMins = stateMins})
+   local tc = require 'rl.model.tilecoding'({numTilings = numTilings, memorySize = memorySize, scaleFactor = stateScalingFactor, stateMins = stateMins})
    
    local weights = torch.FloatTensor(numTilings * memorySize * nbActions):zero():fill(initialWeightVal)
    local eligibility = torch.FloatTensor(numTilings * memorySize * nbActions):zero():fill(0)

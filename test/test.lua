@@ -26,5 +26,37 @@ function testSuite.testAPI()
    tester:assertNoError(testAPI, "testAPI shouldn't give an error")
 end
 
+function testSuite.tilecode()
+	local numTilings = 8
+   local numTiles = 32
+	local memorySize = numTiles * numTiles
+	local stateScalingFactor = {1, 1}
+	local tc = require 'rl.agent.model.tilecoding'(({
+		numTilings = numTilings, 
+		memorySize = memorySize, 
+		scaleFactor = stateScalingFactor
+	}))
+	local state = {3.6, 7.21}
+   local tiles = tc.tiles(memorySize, numTilings, state)
+   local fTiles = tc.feature(state)
+   tester:eq(tiles, fTiles, "tiles and featuredTiles should be equal")
+end
+
+function testSuite.tilecodePredictable()
+   local numTilings = 8
+   local numTiles = 32
+   local memorySize = numTiles * numTiles
+   local stateScalingFactor = {1, 1}
+   local tc = require 'rl.agent.model.tilecoding'(({
+      numTilings = numTilings, 
+      memorySize = memorySize, 
+      scaleFactor = stateScalingFactor
+   }))
+   local state = {3.6, 7.21}
+   local tiles = tc.tiles(memorySize, numTilings, state)
+   local predictTables = {820, 119, 115, 465, 458, 260, 512, 505}
+   tester:eq(tiles, predictTables, "tiles and predictTables should be equal")
+end
+
 tester:add(testSuite)
 tester:run()
