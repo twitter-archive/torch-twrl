@@ -13,9 +13,11 @@ local function normal(actions, opt)
    -- actionShift is the multiplier for the Continuous action value
    -- TODO: better variable name ?
    local actionShift = opt.actionShift or 1
-
    local actions = torch.normal(actions, std) * actionShift
-   return actions
+
+   -- TODO: this assumes that this function is not called in batches
+   actions = actions:size():size() == 2 and actions[1] or actions
+   return actions:totable()
 end
 
 return {

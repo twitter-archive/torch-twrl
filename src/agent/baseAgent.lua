@@ -36,6 +36,7 @@ local function getAgent(opt)
      epsilonDecayRate = opt.epsilonDecayRate,
      gamma = opt.gamma,
      lambda = opt.lambda,
+     std = opt.policyStd
    })
 
    local learn = require('rl.agent.learningUpdate.' .. opt.learningUpdate)({
@@ -56,8 +57,7 @@ local function getAgent(opt)
    })
 
    function selectAction(client, instanceID, state)
-      local actionSampler = function () return client:env_action_space_sample(instanceID) end
-      return policy(state, actionSampler)
+      return policy(state)
    end
 
    local timestepsTotal = 0
