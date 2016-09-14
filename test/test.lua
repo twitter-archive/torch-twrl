@@ -9,7 +9,7 @@ local gymClient = require '../src/gym-http-api/binding-lua/gym_http_client'
 
 local verbose = false
 local render = false
-local video_callable = 2
+local video_callable = 0
 
 local runTest = require '../src/gym-http-api/binding-lua/test_api'({
    gymClient = gymClient, 
