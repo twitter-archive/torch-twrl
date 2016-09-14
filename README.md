@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/twitter/torch-rl/blob/master/LICENSE)
+
 # torch-rl: Reinforcement Learning in Torch
 torch-rl is an RL framework built in Lua/Torch by Twitter.
 
