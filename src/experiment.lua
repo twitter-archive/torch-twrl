@@ -1,6 +1,6 @@
 local function experiment(envName, agent, nSteps, nIterations, opt)
    local util = require 'rl.util'()
-   local gymClient = require '../src/gym-http-api/binding-lua/gym_http_client'
+   local gymClient = require 'rl'['gymClient']
    local opt = opt or {}
    local base = 'http://127.0.0.1:5000'
    local client = gymClient.new(base)

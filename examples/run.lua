@@ -65,7 +65,7 @@ local nSteps, nIterations = params.nSteps, params.nIterations
 params.outdir = logDir .. '/gym'
 
 -- run test
-local _ = require 'src/experiment'(env, agent, nSteps, nIterations, params)
+local _ = require 'rl.experiment'(env, agent, nSteps, nIterations, params)
 
 
 
