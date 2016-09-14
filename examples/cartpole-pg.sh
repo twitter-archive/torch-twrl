@@ -10,7 +10,7 @@ th run.lua \
 	-learningUpdate reinforce \
    -model mlp \
 	-optimAlpha 0.9 \
-   -timestepsPerBatch 1000 \
+   -timestepsPerBatch 200 \
 	-stepsizeStart 0.3 -gamma 1 \
 	-nHiddenLayerSize 10 \
 	-gradClip 5 \

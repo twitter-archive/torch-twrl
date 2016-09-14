@@ -81,6 +81,11 @@ local function getLearningUpdate(opt)
             for i = 1, N do
                targets[i][allActions[i][1]+1] = advantagesNormalized[i] * 1/(output[i][allActions[i][1]+1])
             end
+            -- Add gradEntropy to targets to improve exploration and prevent convergence 
+            -- to potentially suboptimal deterministic policy, gradient of entropy of 
+            --policy (for gradient descent): -(-logp(s) - 1)
+            local gradEntropy = torch.log(output) + 1
+            targets:add(opt.beta, gradEntropy)
          elseif envDetails.actionType == 'Box' then
             ----------------------------------------
             -- Derivative of log normal w.r.t. mean:
@@ -92,9 +97,6 @@ local function getLearningUpdate(opt)
                targets[i] = ((output[i] - allActions[i])/(policyStd^2)) * advantagesNormalized[i]
             end
          end
-         -- Add gradEntropy to targets to improve exploration and prevent convergence to potentially suboptimal deterministic policy, gradient of entropy of policy (for gradient descent): -(-logp(s) - 1)
-         local gradEntropy = torch.log(output) + 1
-         targets:add(opt.beta, gradEntropy)
          net:backward(allObservations, targets)
          -- Clip gradients
          if gradClip > 0 then
@@ -107,7 +109,7 @@ local function getLearningUpdate(opt)
       
       optimConfig.learningRate = stepsizeStart * ((nIterations - nIter)) / nIterations
       optimConfig.learningRate = mo.max({optimConfig.learningRate, 0.05})
-      local params, newObj = optim.adam(feval, params, optimConfig)
+      local params, newObj = optim.rmsprop(feval, params, optimConfig)
 
       -- Print some learning update details
       print('Learning update at episode: ' .. nIter)
