@@ -1,6 +1,6 @@
 local function experiment(envName, agent, nSteps, nIterations, opt)
    local util = require 'rl.util'()
-   local gymClient = require 'rl'['gymClient']
+   local gymClient = require 'rl.binding-lua.gym_http_client'
    local opt = opt or {}
    local base = 'http://127.0.0.1:5000'
    local client = gymClient.new(base)
@@ -62,9 +62,12 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
    if instanceID ~= nil then
       if pcall(run()) then
          print('Error on running experiment!')
+         return false
       end
    else
-      print('Error: No server found! Be sure to start a Gym server before running an experiment.')
+      print('Error: improper configuration. There may be no Gym server started, or your experiment definition may be incomplete.')
+      return false
    end
+   return true
 end
 return experiment

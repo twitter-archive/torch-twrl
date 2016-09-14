@@ -2,12 +2,10 @@ local base = torch.TestSuite()
 local api = torch.TestSuite()
 local performance = torch.TestSuite()
 local tilecoding = torch.TestSuite()
+local experiment = torch.TestSuite()
 
 local tester = torch.Tester()
 local gymClient = require '../src/gym-http-api/binding-lua/gym_http_client'
-
-local perf = require 'rl.perf'({windowSize = 10})
-local emptyTable = perf.reset()
 
 local verbose = false
 local render = false
@@ -87,27 +85,61 @@ function tilecoding.tilecodePredictable()
 end
 
 function performance.reset()
+   local perf = require 'rl.perf'()
    local emptyTable = perf.reset()
    tester:eq(emptyTable, {}, "performance: reset failed")
 end
 
 function performance.addRewardTerminal()
+   local perf = require 'rl.perf'()
    local traj, trajs = perf.addReward(1, 1, true)
    tester:eq(traj, {}, "performance: add reward terminal failed")
 end
 
 function performance.addRewardNonTerminal()
+   local perf = require 'rl.perf'()
    local traj, trajs = perf.addReward(1, 1, false)
    tester:eq(traj, {1}, "performance: add reward non-terminal failed")
 end
 
 function performance.getSummary()
+   local perf = require 'rl.perf'({windowSize = 10})
+   local _, _ = perf.addReward(1, 0, false)
+   local _, _ = perf.addReward(1, 0, false)
+   local _, _ = perf.addReward(1, 1, true)
+   local _, _ = perf.addReward(2, 0, false)
+   local _, _ = perf.addReward(2, 0, false)
+   local _, _ = perf.addReward(2, 1, true)
    local summary = perf.getSummary()
    tester:eq(summary.windowSize, 10, "performance: get summary failed")
+end
+
+function experiment.badExperimentCall()
+   local success = require 'rl.experiment'()
+   tester:eq(success, false, "bad experiment call should fail with bad settings ")
+end
+
+function experiment.randomNoLearningNoModel()
+   local env = 'CartPole-v0'
+   local params = {
+      policy = 'random',
+      learningUpdate = 'noLearning',
+      model = 'noModel'
+   }
+   local agent = {
+      policy = params.policy,
+      learningUpdate = params.learningUpdate,
+      model = params.model
+   }
+   local nSteps = 2
+   local nIterations = 2
+   local success = require 'rl.experiment'(env, agent, nSteps, nIterations, params)
+   tester:eq(success, true, "basic experiment should run")
 end
 
 tester:add(base)
 -- tester:add(api)
 tester:add(performance)
 tester:add(tilecoding)
+tester:add(experiment)
 tester:run()
