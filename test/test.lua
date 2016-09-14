@@ -1,5 +1,7 @@
 local base = torch.TestSuite()
 local api = torch.TestSuite()
+local atari = torch.TestSuite()
+local mujoco = torch.TestSuite()
 local performance = torch.TestSuite()
 local tilecoding = torch.TestSuite()
 local experiment = torch.TestSuite()
@@ -7,6 +9,7 @@ local experiment = torch.TestSuite()
 local tester = torch.Tester()
 local gymClient = require '../src/gym-http-api/binding-lua/gym_http_client'
 
+-- disable rendering and video for testing
 local verbose = false
 local render = false
 local video_callable = 0
@@ -42,12 +45,12 @@ function api.testFrozenLake()
    tester:eq(success, true, "testCartPole shouldn't give an error")
 end
 
-function api.testAtari()
+function atari.testAtari()
    local success = runTest('BattleZone-v0')
    tester:eq(success, true, "testAtari shouldn't give an error if you have Atari configured")
 end
 
-function api.testMujoco()
+function mujoco.testMujoco()
    local success = runTest('InvertedPendulum-v1')
    tester:eq(success, true, "testMujoco shouldn't give an error if you have MuJoCo configured")
 end
@@ -139,6 +142,8 @@ end
 
 tester:add(base)
 tester:add(api)
+-- tester:add(atari)
+-- tester:add(mujoco)
 tester:add(performance)
 tester:add(tilecoding)
 tester:add(experiment)
