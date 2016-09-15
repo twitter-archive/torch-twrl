@@ -12,6 +12,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
    local renderAllSteps = opt.renderAllSteps
    local render = renderAllSteps == 'true' and true or false
    local perf = require 'rl.perf'({nIterations = nSteps, windowSize = opt.windowSize})
+
    local function run()
       client:env_monitor_start(instanceID, outdir, force, resume, video)
       local agentOpt = opt or {}
@@ -25,6 +26,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
          function agentOpt.randomActionSampler() return client:env_action_space_sample(instanceID) end
       local agent = require 'rl.agent.baseAgent'(agentOpt)
       local iterPerformance = {}
+
       for nIter = 1, nIterations do
          collectgarbage()
          perf.reset()
@@ -43,7 +45,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
          end
          iterPerformance = perf.getSummary(nIter)
       end
-    
+
       -- Dump result info to disk and close the Gym monitor
       client:env_monitor_close(instanceID)
 
