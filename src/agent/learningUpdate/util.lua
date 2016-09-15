@@ -30,7 +30,7 @@ local function getBaseline(trajs, trajLengths, trajReturns, baselineType)
    return paddedReturns:mean(1):t():squeeze()
 end
 
-function whiten(advantages)
+function normalize(advantages)
    return (advantages - advantages:mean())/(advantages:std() + smallEps)
 end
 
@@ -38,5 +38,5 @@ return {
    smallEps = smallEps,
    discount = discount,
    getBaseline = getBaseline,
-   whiten = whiten
+   normalize = normalize
 }
