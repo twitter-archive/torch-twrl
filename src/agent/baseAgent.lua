@@ -30,7 +30,7 @@ local function getAgent(opt)
    policy = require('rl.agent.policy')[opt.policy]({
      client = opt.client,
      instanceID = instanceID,
-     nStates = envDetails.nbStates,
+     envDetails = envDetails,
      model = model,
      epsilon = opt.epsilon,
      epsilonMinValue = opt.epsilonMinValue,
