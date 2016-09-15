@@ -2,21 +2,21 @@
 local function tilecoding(opt)
    -- Set a random seed for consistent hashing
    math.randomseed(65597)
-	local numTilings = opt.numTilings
-	local scaleFactor = opt.scaleFactor
-	local memorySize = opt.memorySize
+   local numTilings = opt.numTilings
+   local scaleFactor = opt.scaleFactor
+   local memorySize = opt.memorySize
    local stateMins = opt.stateMins or {}
    local sizeVal = opt.sizeVal or 2048
-	local maxLongInteger = 2147483647
-	local maxLongIntegerBy4 = math.floor(maxLongInteger/4)
-	local randomTable = {}
-	-- initialize the table of random numbers for UNH hashing
-	for i = 1,sizeVal do
-		-- the range are matching the original python code
-		randomTable[i] = math.random(0, maxLongIntegerBy4 - 1)
-	end
-	local _qstate = {}
-	local _base = {}
+   local maxLongInteger = 2147483647
+   local maxLongIntegerBy4 = math.floor(maxLongInteger/4)
+   local randomTable = {}
+   -- initialize the table of random numbers for UNH hashing
+   for i = 1,sizeVal do
+      -- the range are matching the original python code
+      randomTable[i] = math.random(0, maxLongIntegerBy4 - 1)
+   end
+   local _qstate = {}
+   local _base = {}
    local function hashcoords(coordinates, m)
       local increment = 449
       local res = 0
@@ -26,7 +26,7 @@ local function tilecoding(opt)
       end
       return res % m
    end
-	local tc = {}
+   local tc = {}
    function tc.feature(s)
       local floats = {}
       assert(#s==#scaleFactor,"Dimension of scaling factor and feature vectors must match!")
@@ -40,7 +40,7 @@ local function tilecoding(opt)
       local F = tc.tiles(memorySize, numTilings, floats)
       return F
    end
-	function tc.tiles(memorySize, numTilings, floats)
+   function tc.tiles(memorySize, numTilings, floats)
       local coords = {}
       local Tiles = {}
       local _qstate = {}
@@ -60,6 +60,6 @@ local function tilecoding(opt)
       end
       return Tiles
    end
-	return tc
+   return tc
 end
 return tilecoding

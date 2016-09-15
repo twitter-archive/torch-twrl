@@ -35,8 +35,8 @@ function whiten(advantages)
 end
 
 return {
-	smallEps = smallEps,
-	discount = discount,
-	getBaseline = getBaseline,
-	whiten = whiten	
+   smallEps = smallEps,
+   discount = discount,
+   getBaseline = getBaseline,
+   whiten = whiten
 }

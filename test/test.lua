@@ -31,7 +31,7 @@ function base.torchTensor()
 end
 
 function api.testCartPole()
-	local success = runTest('CartPole-v0')
+   local success = runTest('CartPole-v0')
    tester:eq(success, true, "testCartPole shouldn't give an error")
 end
 
@@ -56,16 +56,16 @@ function mujoco.testMujoco()
 end
 
 function tilecoding.tilecodeConsistent()
-	local numTilings = 8
+   local numTilings = 8
    local numTiles = 32
-	local memorySize = numTiles * numTiles
-	local stateScalingFactor = {1, 1}
-	local tc = require 'rl.agent.model.tilecoding'(({
-		numTilings = numTilings, 
-		memorySize = memorySize, 
-		scaleFactor = stateScalingFactor
-	}))
-	local state = {3.6, 7.21}
+   local memorySize = numTiles * numTiles
+   local stateScalingFactor = {1, 1}
+   local tc = require 'rl.agent.model.tilecoding'(({
+      numTilings = numTilings, 
+      memorySize = memorySize, 
+      scaleFactor = stateScalingFactor
+   }))
+   local state = {3.6, 7.21}
    local tiles = tc.tiles(memorySize, numTilings, state)
    local fTiles = tc.feature(state)
    tester:eq(tiles, fTiles, "tiles and featuredTiles should be equal")
@@ -138,8 +138,8 @@ end
 
 tester:add(base)
 tester:add(api)
-tester:add(atari)
-tester:add(mujoco)
+tester:add(atari):disable('testAtari')
+tester:add(mujoco):disable('testMujoco')
 tester:add(performance)
 tester:add(tilecoding)
 tester:add(experiment)
