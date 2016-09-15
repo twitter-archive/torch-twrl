@@ -28,26 +28,41 @@ Works so far?
 You should have everything you need:
 * Start your gym_http_server with
 ~~~~
-python src/gym-http-server/gym_http_server.py
+python src/gym-http-api/gym_http_server.py
 ~~~~
 
 * In a new console window (or tab), run the example script (policy gradient agent in environment CartPole-v0)
 ~~~
-chmod u+x run_tests.sh
-./run_tests.sh
+cd examples
+chmod u+x cartpole-pg.sh
+./cartpole-pg.sh
 ~~~
 
 This script sets parameters for the experiment, in detail here is what it is calling:
 
 ~~~
-th testScript.lua -env 'CartPole-v0' \
-	-policy categorical -learningUpdate reinforce \
-	-model mlp -optimAlpha 0.9 \
- -timestepsPerBatch 1000 -stepsizeStart 0.3 -gamma 1 \
-	-nHiddenLayerSize 10 -gradClip 5 -baselineType padTimeDepAvReturn \
-	-beta 0.01 -weightDecay 0 -windowSize 100 \
- -nSteps 1000 -nIterations 1000 -video 0 \
-	-uploadResults true -renderAllSteps false
+th run.lua \
+	-env 'CartPole-v0' \
+	-policy categorical \
+	-learningUpdate reinforce \
+   	-model mlp \
+	-optimAlpha 0.9 \
+   	-timestepsPerBatch 1000 \
+	-stepsizeStart 0.3 \
+	-gamma 1 \
+	-nHiddenLayerSize 10 \
+	-gradClip 5 \
+	-baselineType padTimeDepAvReturn \
+	-beta 0.01 \
+	-weightDecay 0 \
+	-windowSize 10 \
+   	-nSteps 1000 \
+	-nIterations 1000 \
+	-video 100 \
+	-optimType rmsprop \
+	-verboseUpdate true \
+	-uploadResults false \
+	-renderAllSteps false
 ~~~
 
 Your results should look something [our results from the OpenAI Gym leaderboard](https://gym.openai.com/evaluations/eval_48l1nOQ7ur6htkF9uGw)
