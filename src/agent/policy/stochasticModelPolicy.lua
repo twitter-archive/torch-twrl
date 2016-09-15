@@ -10,14 +10,15 @@ local function getStochasticModelPolicy(opt)
       local nStates = envDetails.nbStates
       local model = opt.model.net
 
-      local actionSpaceBoundFactor = torch.Tensor(nbActionSpace):zero()
       if envDetails.actionType == 'Discrete' then
          opt.actionShift = 1
       elseif envDetails.actionType == 'Box' then
+         local actionBoundFactor = torch.Tensor(envDetails.nbActionSpace):zero()
          for i = 1, envDetails.nbActionSpace do
-            actionSpaceBounds[i] = (envDetails.actionSpec['high'][i] -
+            actionBoundFactor[i] = (envDetails.actionSpec['high'][i] -
                envDetails.actionSpec['low'][i]) / 2.0
          end
+         opt.actionBoundFactor = actionBoundFactor
       end
 
       local function selectAction(state)
