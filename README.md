@@ -12,7 +12,7 @@ cd ~/torch; bash install-deps;
 ./install.sh
 ~~~~
 
-Clone from the repository, and install torch-twrl:
+Install torch-twrl
 ~~~~~
 git clone --recursive https://github.com/twitter/torch-twrl.git
 cd torch-twrl
@@ -21,7 +21,7 @@ luarocks make
 
 Want to play in the gym?
 ------------------------
-1. Start a virtual environment, not necessary but helps keep everything clean
+1. Start a virtual environment, not necessary but it helps keep your installation clean
 
 2. Download and install [OpenAI Gym](https://github.com/openai/gym), gym-http-api requirements, and [ffmpeg](http://ffmpeg.org/)
 
