@@ -5,6 +5,13 @@ torch-twrl is an RL framework built in Lua/Torch by Twitter.
 
 Installation
 ------------
+Install torch
+~~~~
+git clone https://github.com/torch/distro.git ~/torch --recursive
+cd ~/torch; bash install-deps;
+./install.sh
+~~~~
+
 Clone from the repository, and install torch-twrl:
 ~~~~~
 git clone --recursive https://github.com/twitter/torch-twrl.git
