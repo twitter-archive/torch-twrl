@@ -26,6 +26,7 @@ Want to play in the gym?
 2. Download and install [OpenAI Gym](https://github.com/openai/gym), gym-http-api requirements, and [ffmpeg](http://ffmpeg.org/)
 
 ~~~
+pip install virtualenv
 virtualenv venv
 pip install gym
 pip install -r src/gym-http-api/requirements.txt
