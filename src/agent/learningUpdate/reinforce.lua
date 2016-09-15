@@ -15,7 +15,7 @@ local function getLearningUpdate(opt)
    local net = model.net
    local params, gradParams = net:getParameters()
    local paramsSq = torch.Tensor(gradParams:size()):zero()
-   local verboseLearningUpdate = opt.verboseLearningUpdate or true
+   local verboseLearningUpdate = opt.verboseLearningUpdate or false
 
    local optimConfig = {
       learningRate = stepsizeStart,
@@ -99,27 +99,28 @@ local function getLearningUpdate(opt)
             end
          end
          net:backward(allObservations, targets)
-         -- -- Clip gradients
-         -- if gradClip > 0 then
-         --    gradParams:clamp(-gradClip, gradClip)
-         -- end
+         -- Clip gradients
+         if gradClip > 0 then
+            gradParams:clamp(-gradClip, gradClip)
+         end
          local obj = -2*torch.mean(torch.sum(targets, 2))/numSteps
          return obj, gradParams
       end
 
-      local newObj, newGradParams = feval()
+      -- The old way
+      -- local newObj, newGradParams = feval()
+      -- paramsSq = paramsSq * optimConfig.alpha + torch.pow(gradParams, 2) * (1 - optimConfig.alpha)
+      -- -- Clip gradients
+      -- if gradClip > 0 then
+      --    gradParams:clamp(-gradClip, gradClip)
+      -- end
+      -- optimConfig.learningRate = stepsizeStart * ((nIterations - nIter)) / nIterations
+      -- params:add(torch.cdiv(gradParams * optimConfig.learningRate, torch.sqrt(paramsSq) + optimConfig.epsilon))
 
-      paramsSq = paramsSq * optimConfig.alpha + torch.pow(gradParams, 2) * (1 - optimConfig.alpha)
-
-      -- Clip gradients
-      if gradClip > 0 then
-         gradParams:clamp(-gradClip, gradClip)
-      end
-
-      optimConfig.learningRate = stepsizeStart * ((nIterations - nIter)) / nIterations
-      params:add(torch.cdiv(gradParams * optimConfig.learningRate, torch.sqrt(paramsSq) + optimConfig.epsilon))
-
-      -- local params, newObj = optim.rmsprop(feval, params, optimConfig)
+      -- the new way
+      optimConfig.learningRate = -stepsizeStart * ((nIterations - nIter)) / nIterations
+      -- TODO: make the optimization package a parameter to set 
+      local params, newObj = optim.rmsprop(feval, params, optimConfig)
 
       if verboseLearningUpdate then
          -- Print some learning update details
