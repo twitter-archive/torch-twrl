@@ -1,14 +1,14 @@
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/twitter/torch-rl/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/twitter/torch-twrl/blob/master/LICENSE)
 
-# torch-rl: Reinforcement Learning in Torch
-torch-rl is an RL framework built in Lua/Torch by Twitter.
+# torch-twrl: Reinforcement Learning in Torch
+torch-twrl is an RL framework built in Lua/Torch by Twitter.
 
 Installation
 ------------
-Clone from the repository, and install torch-rl:
+Clone from the repository, and install torch-twrl:
 ~~~~~
-git clone --recursive https://github.com/twitter/torch-rl.git
-cd torch-rl
+git clone --recursive https://github.com/twitter/torch-twrl.git
+cd torch-twrl
 luarocks make
 ~~~~~
 
@@ -23,10 +23,10 @@ virtualenv venv
 pip install gym
 ~~~
 
-Works so far? 
+Works so far?
 ------------------------
 You should have everything you need:
-* Start your gym_http_server with 
+* Start your gym_http_server with
 ~~~~
 python src/gym-http-server/gym_http_server.py
 ~~~~
@@ -49,7 +49,7 @@ th testScript.lua -env 'CartPole-v0' \
  -nSteps 1000 -nIterations 1000 -video 0 \
 	-uploadResults true -renderAllSteps false
 ~~~
-	
+
 Your results should look something [our results from the OpenAI Gym leaderboard](https://gym.openai.com/evaluations/eval_48l1nOQ7ur6htkF9uGw)
 
 Doesn't work?
@@ -65,7 +65,7 @@ nose2
 python src/gym-http-api/gym_http_server.py
 ~~~~
 
-3) In a new console window (or tab), run torch-rl tests
+3) In a new console window (or tab), run torch-twrl tests
 ~~~~
 luarocks make; th test/test.lua
 ~~~~
@@ -74,7 +74,7 @@ Dependencies
 ------------
 Testing of RL development is a tricky endeavor, it requires well established, unified, baselines and a large community of active developers. The OpenAI Gym provides a great set of example environments for this purpose. Link: https://github.com/openai/gym
 
-The OpenAI Gym is written in python and it expects algorithms which interact with its various environments to be as well. torch-rl is compatible with the OpenAI Gym with the use of a modified Gym HTTP API, based on the original code from OpenAI; [gym-http-api](https://github.com/korymath/gym-http-api) is a submodule of torch-rl.
+The OpenAI Gym is written in python and it expects algorithms which interact with its various environments to be as well. torch-twrl is compatible with the OpenAI Gym with the use of a modified Gym HTTP API, based on the original code from OpenAI; [gym-http-api](https://github.com/korymath/gym-http-api) is a submodule of torch-twrl.
 
 All Lua dependencies should be installed on your first build.
 
@@ -84,24 +84,24 @@ luarocks make
 ~~~~
 
 ## Agents
-torch-rl implements several agents, they are located in src/agents. 
+torch-twrl implements several agents, they are located in src/agents.
 Agents are defined by a model, policy, and learning update.
 
 * __Random__
 	* model: noModel
-	* policy: [random](https://github.com/twitter/torch-rl/blob/master/src/agent/policy/random.lua)
-	* learningUpdate: noLearning 
+	* policy: [random](https://github.com/twitter/torch-twrl/blob/master/src/agent/policy/random.lua)
+	* learningUpdate: noLearning
 * __TD(Lambda)__
 	* model: qFunction
-	* policy: [egreedy](https://github.com/twitter/torch-rl/blob/master/src/agent/policy/egreedy.lua)
+	* policy: [egreedy](https://github.com/twitter/torch-twrl/blob/master/src/agent/policy/egreedy.lua)
 	* learningUpdate: tdLambda - implements temporal difference (Q-learning or SARSA) learning with eligibility traces (replacing or accumulating)
 * __Policy Gradient__ [Williams, 1992](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf):
 	* model: mlp - multilayer perceptron, final layeer: tanh for continuous, softmax for discrete
 	* policy: normal for continuous actions, categorical for discrete
 	* learningUpdate: reinforce
-	
+
 ## Important note about agent/environment compatibility:
-The OpenAI Gym has many environments and is continuously growing. Some agents may be compatible with only a subset of environments. That is, an agent built for continuous action space environments may not work if the environment expects discrete action spaces. 
+The OpenAI Gym has many environments and is continuously growing. Some agents may be compatible with only a subset of environments. That is, an agent built for continuous action space environments may not work if the environment expects discrete action spaces.
 
 [Here is a useful table of the environments](https://github.com/openai/gym/wiki/Table-of-environments), with details on the different variables that may help to configure agents appropriately.
 
@@ -130,4 +130,4 @@ References
 
 License
 -------
-[torch-rl is released under the MIT License. Copyright (c) 2016 Twitter, Inc.](https://github.com/twitter/torch-rl/blob/master/LICENSE)
+[torch-twrl is released under the MIT License. Copyright (c) 2016 Twitter, Inc.](https://github.com/twitter/torch-twrl/blob/master/LICENSE)
