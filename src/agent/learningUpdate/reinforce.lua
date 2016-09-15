@@ -26,7 +26,7 @@ local function getLearningUpdate(opt)
       epsilon = smallEps
    }
 
-	local function learn(trajs, nIter)
+   local function learn(trajs, nIter)
       local allTransitions = mo.flatten(trajs, true)
       local numSteps = #allTransitions
       local numEps = #trajs
@@ -127,7 +127,7 @@ local function getLearningUpdate(opt)
          print('Number of steps in learning batch: ' .. numSteps)
       end
    end
-	return learn
+   return learn
 end
 
 return getLearningUpdate
