@@ -16,11 +16,12 @@ Want to play in the gym?
 ------------------------
 1. Start a virtual environment, not necessary but helps keep everything clean
 
-2. Download and install [OpenAI Gym](https://github.com/openai/gym)
+2. Download and install [OpenAI Gym](https://github.com/openai/gym) and [ffmpeg](http://ffmpeg.org/)
 
 ~~~
 virtualenv venv
 pip install gym
+brew install ffmpeg
 ~~~
 
 Works so far?
