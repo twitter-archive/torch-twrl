@@ -89,7 +89,6 @@ local function getAgent(opt)
 
    function reward(opt)
       local transition = opt
-      -- TODO: decompose batch/iterative for simplicity
       if learningType == 'noBatch' then
         -- iterative learning
         learn(transition, opt.nIter)

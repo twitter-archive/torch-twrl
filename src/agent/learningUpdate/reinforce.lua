@@ -14,10 +14,11 @@ local function getLearningUpdate(opt)
    local model = opt.model
    local net = model.net
    local params, gradParams = net:getParameters()
-   local verboseLearningUpdate = opt.verboseLearningUpdate or false
+   local paramsSq = torch.Tensor(gradParams:size()):zero()
+   local verboseLearningUpdate = opt.verboseLearningUpdate or true
 
    local optimConfig = {
-      learningRate = -stepsizeStart,
+      learningRate = stepsizeStart,
       alpha = opt.optimAlpha,
       weightDecay = opt.weightDecay,
       epsilon = smallEps
@@ -54,7 +55,6 @@ local function getLearningUpdate(opt)
       for i = 1, numEps-1 do
          allAdvantages = torch.cat(allAdvantages, advs[i+1])
       end
-      local N = allObservations:size(1)
       
       -- whiten the advantages to balance negative and positive normalized rewards
       local advantagesNormalized = util.whiten(allAdvantages)
@@ -71,7 +71,7 @@ local function getLearningUpdate(opt)
 
          -- Define targets for optimization
          --- REINFORCE update for discrete (Reinforce Categorical) and continuous actions (Reinforce Normal)
-         local targets = torch.DoubleTensor(N,envDetails.nbActions):zero()
+         local targets = torch.DoubleTensor(numSteps, envDetails.nbActions):zero()
          if envDetails.actionType == 'Discrete' then
             ----------------------------------------
             -- derivative of log categorical w.r.t. p
@@ -79,7 +79,7 @@ local function getLearningUpdate(opt)
             -- ------------ =
             --     d p          0         otherwise
             ----------------------------------------
-            for i = 1, N do
+            for i = 1, numSteps do
                targets[i][allActions[i][1]+1] = advantagesNormalized[i] * 1/(output[i][allActions[i][1]+1])
             end
             -- Add gradEntropy to targets to improve exploration and prevent convergence 
@@ -94,23 +94,32 @@ local function getLearningUpdate(opt)
             -- -------------- = -------
             --      d u           s^2
             ----------------------------------------
-            for i = 1, N do
+            for i = 1, numSteps do
                targets[i] = ((output[i] - allActions[i])/(policyStd^2)) * advantagesNormalized[i]
             end
          end
          net:backward(allObservations, targets)
-         -- Clip gradients
-         if gradClip > 0 then
-            gradParams:clamp(-gradClip, gradClip)
-         end
-         gradParams:div(-1)
-         local obj = -torch.mean(torch.sum(targets, 2))
+         -- -- Clip gradients
+         -- if gradClip > 0 then
+         --    gradParams:clamp(-gradClip, gradClip)
+         -- end
+         local obj = -2*torch.mean(torch.sum(targets, 2))/numSteps
          return obj, gradParams
       end
-      
-      -- optimConfig.learningRate = stepsizeStart * ((nIterations - nIter)) / nIterations
-      optimConfig.learningRate = mo.max({optimConfig.learningRate, 0.1})
-      local params, newObj = optim.rmsprop(feval, params, optimConfig)
+
+      local newObj, newGradParams = feval()
+
+      paramsSq = paramsSq * optimConfig.alpha + torch.pow(gradParams, 2) * (1 - optimConfig.alpha)
+
+      -- Clip gradients
+      if gradClip > 0 then
+         gradParams:clamp(-gradClip, gradClip)
+      end
+
+      optimConfig.learningRate = stepsizeStart * ((nIterations - nIter)) / nIterations
+      params:add(torch.cdiv(gradParams * optimConfig.learningRate, torch.sqrt(paramsSq) + optimConfig.epsilon))
+
+      -- local params, newObj = optim.rmsprop(feval, params, optimConfig)
 
       if verboseLearningUpdate then
          -- Print some learning update details
