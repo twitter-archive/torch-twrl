@@ -31,10 +31,9 @@ local nSteps, nIterations = params.nSteps, params.nIterations
 stepsizeStart = {0.1, 0.01, 0.001}
 
 results = {}
-for i = 1,10 do
+for i = 1,3 do
 	-- random search over parameters
-	params.stepsizeStart = stepsizeStart[math.random(#stepsizeStart)]
-
+	params.stepsizeStart = stepsizeStart[i]
 	-- run test
 	local performance = require 'rl.experiment'(env, agent, nSteps, nIterations, params)
 	print({i, params.stepsizeStart, performance.meanEpRewardWindow})

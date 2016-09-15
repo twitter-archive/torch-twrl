@@ -20,6 +20,6 @@ th run.lua \
 	-windowSize 10 \
    -nSteps 1000 \
 	-nIterations 1000 \
-	-video 0 \
+	-video 10 \
 	-uploadResults true \
 	-renderAllSteps false
