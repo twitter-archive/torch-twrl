@@ -11,7 +11,8 @@ th run.lua \
    -model mlp \
 	-optimAlpha 0.9 \
    -timestepsPerBatch 1000 \
-	-stepsizeStart 0.3 -gamma 1 \
+	-stepsizeStart 0.3 \
+	-gamma 1 \
 	-nHiddenLayerSize 10 \
 	-gradClip 5 \
 	-baselineType padTimeDepAvReturn \
@@ -20,6 +21,8 @@ th run.lua \
 	-windowSize 10 \
    -nSteps 1000 \
 	-nIterations 1000 \
-	-video 0 \
-	-uploadResults true \
+	-video 100 \
+	-optimType rmsprop \
+	-verboseUpdate true \
+	-uploadResults false \
 	-renderAllSteps false

@@ -1,11 +1,7 @@
 local function categorical(actions, opt)
    local opt = opt or {}
-
    -- typically the action space is 0 indexed
    local actionShift = opt.actionShift or 1
-   -- print(actions)
-   -- local actions = torch.exp(actions)
-   -- print(actions)
    return (torch.multinomial(actions, 1) - actionShift)[1][1]
 end
 

@@ -15,7 +15,9 @@ local function getLearningUpdate(opt)
    local net = model.net
    local params, gradParams = net:getParameters()
    local paramsSq = torch.Tensor(gradParams:size()):zero()
-   local verboseLearningUpdate = opt.verboseLearningUpdate or false
+   local verboseUpdate = opt.verboseUpdate
+   local optimType = opt.optimType
+   local optimizer = optim[optimType]
 
    local optimConfig = {
       learningRate = stepsizeStart,
@@ -98,31 +100,26 @@ local function getLearningUpdate(opt)
                targets[i] = ((output[i] - allActions[i])/(policyStd^2)) * advantagesNormalized[i]
             end
          end
+
+         -- BACKWARD PASS
          net:backward(allObservations, targets)
+
          -- Clip gradients
          if gradClip > 0 then
             gradParams:clamp(-gradClip, gradClip)
          end
+
+         -- gradient descent
+         gradParams:div(-1)
+         
          local obj = -2*torch.mean(torch.sum(targets, 2))/numSteps
          return obj, gradParams
       end
 
-      -- The old way
-      -- local newObj, newGradParams = feval()
-      -- paramsSq = paramsSq * optimConfig.alpha + torch.pow(gradParams, 2) * (1 - optimConfig.alpha)
-      -- -- Clip gradients
-      -- if gradClip > 0 then
-      --    gradParams:clamp(-gradClip, gradClip)
-      -- end
-      -- optimConfig.learningRate = stepsizeStart * ((nIterations - nIter)) / nIterations
-      -- params:add(torch.cdiv(gradParams * optimConfig.learningRate, torch.sqrt(paramsSq) + optimConfig.epsilon))
+      optimConfig.learningRate = stepsizeStart * ((nIterations - nIter)) / nIterations
+      local params, newObj = optimizer(feval, params, optimConfig)
 
-      -- the new way
-      optimConfig.learningRate = -stepsizeStart * ((nIterations - nIter)) / nIterations
-      -- TODO: make the optimization package a parameter to set 
-      local params, newObj = optim.rmsprop(feval, params, optimConfig)
-
-      if verboseLearningUpdate then
+      if verboseUpdate == 'true' then
          -- Print some learning update details
          print('Learning update at episode: ' .. nIter)
          print('Learning rate: ' .. optimConfig.learningRate)
