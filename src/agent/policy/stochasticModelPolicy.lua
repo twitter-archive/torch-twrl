@@ -12,7 +12,6 @@ local function getStochasticModelPolicy(opt)
       local function selectAction(state)
          -- autocast state to a table, to handle cast to tensor
          local state = (type(state) == 'number') and {state} or state
-
          local obsv = torch.DoubleTensor(state):reshape(1,nStates)
          local out = model:forward(obsv)
          return actionSampler(out, opt)

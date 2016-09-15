@@ -55,7 +55,9 @@ local function getAgent(opt)
      nIterations = opt.nIterations,
      numTilings = opt.numTilings,
      relativeAlpha = opt.relativeAlpha,
-     optimAlpha = opt.optimAlpha
+     optimAlpha = opt.optimAlpha,
+     optimType = opt.optimType,
+     verboseUpdate = opt.verboseUpdate
    })
 
    function selectAction(client, instanceID, state)

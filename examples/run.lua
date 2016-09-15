@@ -1,8 +1,8 @@
 local params = lapp[[
-   -e, --env                  (default "MountainCar-v0")       Gym environment (gym.openai.com/envs)
-   -p, --policy               (default "random")     				Gym agent policy (agents/gym/policy)
-   -l, --learningUpdate			(default "noLearning")           Gym agent learning update (agents/gym/learn)
-   -m, --model            		(default "noModel")              Gym agent model (agents/gym/model)
+   -e, --env                  (default "CartPole-v0")          Environment (http://gym.openai.com/envs)
+   -p, --policy               (default "random")     				Agent policy
+   -l, --learningUpdate			(default "noLearning")           Agent learning update
+   -m, --model            		(default "noModel")              Agent model
    -s, --nSteps              	(default 10)                 		Maximum number of steps per episode (envs may define a max steps less than this number)
    -i, --nIterations				(default 2)                 		Number of training iterations
    -v, --video     				(default 200)                 	Record a video every N steps, or false
@@ -32,11 +32,9 @@ local params = lapp[[
    --initialWeightVal         (default -0.01)                  Initial linear function approximation weights
    --traceType                (default "replacing")            replacing or accumulating traces
    --tdLearnUpdate            (default "qLearning")            qLeanring or SARSA td-learning update
-   --actorLearningRate        (default 0.001)                  DDPG - actor network learning rate
-   --criticLearningRate       (default 0.0001)                 DDPG - critic network learning rate
-   --tau                      (default 0.001)                  DDPG - soft target update parameter
-   --bufferSize               (default 10000)                  DDPG - buffer size
    --windowSize               (default 100)                    Performance metric window size
+   --optimType                (default "rmsprop")              Optimization to use (rmsprop, adam, sgd,...)
+   --verboseUpdate            (default false)                  Print details of the learning update
 ]]
 
 -- Get time, build log folder
