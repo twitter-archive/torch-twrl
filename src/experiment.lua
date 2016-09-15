@@ -7,7 +7,6 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
    local instanceID = client:env_create(envName)
    local outdir = opt.outdir
    local video = opt.video
-   local showTrajectory = opt.showTrajectory
    local force = opt.force
    local resume = opt.resume
    local renderAllSteps = opt.renderAllSteps

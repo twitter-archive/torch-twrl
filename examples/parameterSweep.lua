@@ -5,12 +5,23 @@ params = {
 	policy = 'categorical',
 	learningUpdate = 'reinforce',
 	model = 'mlp',
-	nIterations = 50,
-	nSteps = 1000,
+	force = 'true',
+	optimAlpha = 0.9,
+	timestepsPerBatch = 1000,
+	gamma = 1,
+	nHiddenLayerSize = 10,
+	gradClip = 5,
+	baselineType = 'padTimeDepAvReturn',
+	beta = 0.01,
+	weightDecay = 0,
 	windowSize = 10,
+	nSteps = 1000,
+	nIterations = 2,
 	video = 0,
+	optimType = 'rmsprop',
+	verboseUpdate = 'true',
 	uploadResults = 'false',
-	force = 'true'
+	renderAllSteps = 'false'
 }
 
 -- Get time, build log folder
