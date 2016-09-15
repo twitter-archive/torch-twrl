@@ -15,8 +15,7 @@ local function getStochasticModelPolicy(opt)
       elseif envDetails.actionType == 'Box' then
          local actionBoundFactor = torch.Tensor(envDetails.nbActionSpace):zero()
          for i = 1, envDetails.nbActionSpace do
-            actionBoundFactor[i] = (envDetails.actionSpec['high'][i] -
-               envDetails.actionSpec['low'][i]) / 2.0
+            actionBoundFactor[i] =  envDetails.actionSpaceBounds[i][3] / 2.0
          end
          opt.actionBoundFactor = actionBoundFactor
       end
