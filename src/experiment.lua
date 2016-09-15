@@ -66,7 +66,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
       end
    else
       print('Error: improper configuration. There may be no Gym server started, or your experiment definition may be incomplete.')
-      local performance = {}
+      performance = {}
    end
    return performance
 end

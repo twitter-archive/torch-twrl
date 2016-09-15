@@ -113,37 +113,33 @@ function performance.getSummary()
    local _, _ = perf.addReward(2, 0, false)
    local _, _ = perf.addReward(2, 0, false)
    local _, _ = perf.addReward(2, 1, true)
-   local summary = perf.getSummary()
+   local summary = perf.getSummary(2)
    tester:eq(summary.windowSize, 10, "performance: get summary failed")
 end
 
 function experiment.badExperimentCall()
-   local success = require 'rl.experiment'()
-   tester:eq(success, false, "bad experiment call should fail with bad settings ")
+   local performance = require 'rl.experiment'()
+   tester:eq(performance, {}, "bad experiment call should fail with bad settings ")
 end
 
 function experiment.randomNoLearningNoModel()
    local env = 'CartPole-v0'
-   local params = {
+   local params = {}
+   local agent = {
       policy = 'random',
       learningUpdate = 'noLearning',
       model = 'noModel'
    }
-   local agent = {
-      policy = params.policy,
-      learningUpdate = params.learningUpdate,
-      model = params.model
-   }
    local nSteps = 2
    local nIterations = 2
-   local success = require 'rl.experiment'(env, agent, nSteps, nIterations, params)
-   tester:eq(success, true, "basic experiment should run")
+   local performance = require 'rl.experiment'(env, agent, nSteps, nIterations, params)
+   tester:eq(performance.iteration, 2, "basic experiment should run")
 end
 
 tester:add(base)
 tester:add(api)
--- tester:add(atari)
--- tester:add(mujoco)
+tester:add(atari)
+tester:add(mujoco)
 tester:add(performance)
 tester:add(tilecoding)
 tester:add(experiment)

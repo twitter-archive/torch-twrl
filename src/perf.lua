@@ -34,9 +34,9 @@ local function perf(opt)
          table.insert(episodeRewards, epReward)
 
          -- reset episode trajectory table
-         traj = reset()
+         episodeTrajectory = reset()
       end
-      return traj, trajs
+      return episodeTrajectory, trajs
    end
 
    local function getSummary(nIter)
