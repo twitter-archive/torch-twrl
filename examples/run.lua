@@ -66,3 +66,5 @@ params.outdir = logDir .. '/gym'
 
 -- run test
 local performance = require 'rl.experiment'(env, agent, nSteps, nIterations, params)
+print(performance.meanEpRewardWindow)
+print(params)

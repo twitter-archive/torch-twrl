@@ -108,8 +108,8 @@ local function getLearningUpdate(opt)
          return obj, gradParams
       end
       
-      optimConfig.learningRate = stepsizeStart * ((nIterations - nIter)) / nIterations
-      optimConfig.learningRate = mo.max({optimConfig.learningRate, 0.05})
+      -- optimConfig.learningRate = stepsizeStart * ((nIterations - nIter)) / nIterations
+      optimConfig.learningRate = mo.max({optimConfig.learningRate, 0.1})
       local params, newObj = optim.rmsprop(feval, params, optimConfig)
 
       if verboseLearningUpdate then

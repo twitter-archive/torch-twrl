@@ -26,7 +26,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
          function agentOpt.randomActionSampler() return client:env_action_space_sample(instanceID) end
       local agent = require 'rl.agent.baseAgent'(agentOpt)
       local iterPerformance = {}
-      for nIter = 1,nIterations do
+      for nIter = 1, nIterations do
          collectgarbage()
          perf.reset()
          local state = client:env_reset(instanceID)
@@ -42,7 +42,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
             action = nextAction
             if terminal then break end
          end
-         iterPerformance[nIter] = perf.getSummary(nIter)
+         iterPerformance = perf.getSummary(nIter)
       end
     
       -- Dump result info to disk and close the Gym monitor
@@ -60,6 +60,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
    if instanceID ~= nil then
       success, performance = pcall(run)
       if success == false then
+         print(performance)
          print('Error: Experiment was not successfully run.')
          performance = {}
       end
