@@ -14,6 +14,7 @@ local function getLearningUpdate(opt)
    local model = opt.model
    local net = model.net
    local params, gradParams = net:getParameters()
+   local verbose = opt.verbose or false
 
    local optimConfig = {
       learningRate = -stepsizeStart,
@@ -111,12 +112,14 @@ local function getLearningUpdate(opt)
       optimConfig.learningRate = mo.max({optimConfig.learningRate, 0.05})
       local params, newObj = optim.rmsprop(feval, params, optimConfig)
 
-      -- Print some learning update details
-      print('Learning update at episode: ' .. nIter)
-      print('Learning rate: ' .. optimConfig.learningRate)
-      print('Number of episodes in learning batch: ' .. numEps)
-      print('Number of steps in learning batch: ' .. numSteps)
+      if verbose then
+         -- Print some learning update details
+         print('Learning update at episode: ' .. nIter)
+         print('Learning rate: ' .. optimConfig.learningRate)
+         print('Number of episodes in learning batch: ' .. numEps)
+         print('Number of steps in learning batch: ' .. numSteps)
       end
+   end
 	return learn
 end
 

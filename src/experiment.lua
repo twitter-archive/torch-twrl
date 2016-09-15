@@ -12,10 +12,8 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
    local resume = opt.resume
    local renderAllSteps = opt.renderAllSteps
    local render = renderAllSteps == 'true' and true or false
-
    local perf = require 'rl.perf'({nIterations = nSteps, windowSize = opt.windowSize})
    local function run()
-      -- Set up the agent given the details about the environment
       client:env_monitor_start(instanceID, outdir, force, resume, video)
       local agentOpt = opt or {}
          agentOpt.stateSpace = client:env_observation_space_info(instanceID)
@@ -25,11 +23,9 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
          agentOpt.policy = agent.policy
          agentOpt.learningUpdate = agent.learningUpdate
          agentOpt.envDetails = util.getStateAndActionSpecs(agentOpt.stateSpace, agentOpt.actionSpace)
-      
-      function agentOpt.randomActionSampler() return client:env_action_space_sample(instanceID) end
-
+         function agentOpt.randomActionSampler() return client:env_action_space_sample(instanceID) end
       local agent = require 'rl.agent.baseAgent'(agentOpt)
-
+      local iterPerformance = {}
       for nIter = 1,nIterations do
          collectgarbage()
          perf.reset()
@@ -46,7 +42,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
             action = nextAction
             if terminal then break end
          end
-         print(perf.getSummary())
+         iterPerformance[nIter] = perf.getSummary()
       end
     
       -- Dump result info to disk and close the Gym monitor
@@ -57,17 +53,19 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
          -- Upload to the scoreboard, OPENAI_GYM_API_KEY must be set
          client:upload(outdir)
       end
-      return true
+      return iterPerformance
    end
+   -- protect the run call to handle errors
    if instanceID ~= nil then
-      if pcall(run()) then
-         print('Error on running experiment!')
-         return false
+      local success, performance = pcall(run())
+      if not success then
+         print('Error: Experiment was not successfully run.')
+         performance = {}
       end
    else
       print('Error: improper configuration. There may be no Gym server started, or your experiment definition may be incomplete.')
-      return false
+      local performance = {}
    end
-   return true
+   return performance
 end
 return experiment
