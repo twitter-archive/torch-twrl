@@ -5,7 +5,14 @@ torch-twrl is an RL framework built in Lua/Torch by Twitter.
 
 Installation
 ------------
-Clone from the repository, and install torch-twrl:
+Install torch
+~~~~
+git clone https://github.com/torch/distro.git ~/torch --recursive
+cd ~/torch; bash install-deps;
+./install.sh
+~~~~
+
+Install torch-twrl
 ~~~~~
 git clone --recursive https://github.com/twitter/torch-twrl.git
 cd torch-twrl
@@ -14,13 +21,16 @@ luarocks make
 
 Want to play in the gym?
 ------------------------
-1. Start a virtual environment, not necessary but helps keep everything clean
+1. Start a virtual environment, not necessary but it helps keep your installation clean
 
-2. Download and install [OpenAI Gym](https://github.com/openai/gym)
+2. Download and install [OpenAI Gym](https://github.com/openai/gym), gym-http-api requirements, and [ffmpeg](http://ffmpeg.org/)
 
 ~~~
+pip install virtualenv
 virtualenv venv
 pip install gym
+pip install -r src/gym-http-api/requirements.txt
+brew install ffmpeg
 ~~~
 
 Works so far?

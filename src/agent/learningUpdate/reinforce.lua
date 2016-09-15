@@ -58,8 +58,8 @@ local function getLearningUpdate(opt)
          allAdvantages = torch.cat(allAdvantages, advs[i+1])
       end
       
-      -- whiten the advantages to balance negative and positive normalized rewards
-      local advantagesNormalized = util.whiten(allAdvantages)
+      -- normalize the advantages to balance negative and positive normalized rewards
+      local advantagesNormalized = util.normalize(allAdvantages)
 
       local function feval(x)
          --reset the gradient parameters
