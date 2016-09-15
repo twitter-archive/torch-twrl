@@ -42,7 +42,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
             action = nextAction
             if terminal then break end
          end
-         iterPerformance[nIter] = perf.getSummary()
+         iterPerformance[nIter] = perf.getSummary(nIter)
       end
     
       -- Dump result info to disk and close the Gym monitor
@@ -56,9 +56,10 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
       return iterPerformance
    end
    -- protect the run call to handle errors
+   local success, performance
    if instanceID ~= nil then
-      local success, performance = pcall(run())
-      if not success then
+      success, performance = pcall(run)
+      if success == false then
          print('Error: Experiment was not successfully run.')
          performance = {}
       end
