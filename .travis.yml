@@ -51,7 +51,6 @@ before_script:
    - if [[ $TORCH_LUA_VERSION != 'LUAJIT21' && $TORCH_LUA_VERSION != 'LUAJIT20' ]]; then ${INSTALL_PREFIX}/bin/luarocks install luaffi; fi
    - cd $ROOT_TRAVIS_DIR
    - export LD_LIBRARY_PATH=${INSTALL_PREFIX}/lib:$LD_LIBRARY_PATH
-   - git clone https://github.com/openai/gym.git && cd gym && sudo pip install -e .
 script:
    - ${INSTALL_PREFIX}/bin/luarocks make
    - export PATH=${INSTALL_PREFIX}/bin:$PATH
