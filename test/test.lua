@@ -1,3 +1,4 @@
+local torch = require 'torch'
 local base = torch.TestSuite()
 local performance = torch.TestSuite()
 local tilecoding = torch.TestSuite()

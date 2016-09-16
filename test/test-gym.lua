@@ -1,3 +1,4 @@
+local torch = require 'torch'
 local api = torch.TestSuite()
 local atari = torch.TestSuite()
 local mujoco = torch.TestSuite()
