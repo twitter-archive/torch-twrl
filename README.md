@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/twitter/torch-twrl/blob/master/LICENSE)
+[![Build Status](https://travis-ci.com/twitter/torch-twrl.svg?token=JUyATyLn3rqyEx2nzMk9&branch=master)](https://travis-ci.com/twitter/torch-twrl) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/twitter/torch-twrl/blob/master/LICENSE)
 
 # torch-twrl: Reinforcement Learning in Torch
 torch-twrl is an RL framework built in Lua/Torch by Twitter.
@@ -123,7 +123,7 @@ Agents are defined by a model, policy, and learning update.
 	* learningUpdate: tdLambda - implements temporal difference (Q-learning or SARSA) learning with eligibility traces (replacing or accumulating)
 * __Policy Gradient__ [Williams, 1992](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf):
 	* model: mlp - multilayer perceptron, final layeer: tanh for continuous, softmax for discrete
-	* policy: normal for continuous actions, categorical for discrete
+	* policy: [stochasticModelPolicy](https://github.com/twitter/torch-twrl/blob/master/src/agent/policy/stochasticModelPolicy.lua), normal for continuous actions, categorical for discrete
 	* learningUpdate: reinforce
 
 ## Important note about agent/environment compatibility:
