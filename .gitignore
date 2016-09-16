@@ -1,3 +1,4 @@
 *logs*
 build/*
 .DS_Store
+venv/

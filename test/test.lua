@@ -82,9 +82,9 @@ function tilecoding.tilecodePredictable()
       scaleFactor = stateScalingFactor
    }))
    local state = {3.6, 7.21}
-   local tiles = tc.tiles(memorySize, numTilings, state)
-   local predictTables = {820, 119, 115, 465, 458, 260, 512, 505}
-   tester:eq(tiles, predictTables, "tiles and predictTables should be equal")
+   local tiles1 = tc.tiles(memorySize, numTilings, state)
+   local tiles2 = tc.tiles(memorySize, numTilings, state)
+   tester:eq(tiles1, tiles2, "tiles1 and tiles 2 should be equal")
 end
 
 function performance.reset()
