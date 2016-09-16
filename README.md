@@ -28,6 +28,7 @@ Want to play in the gym?
 ~~~
 pip install virtualenv
 virtualenv venv
+source venv/bin/activate
 pip install gym
 pip install -r src/gym-http-api/requirements.txt
 brew install ffmpeg
