@@ -15,7 +15,7 @@ local function getAgent(opt)
    opt.nHiddenLayerSize = opt.nHiddenLayerSize or 10
    if opt.model then
       local modelName = opt.model
-      model = require('rl.agent.model.' .. opt.model)({
+      model = require('twrl.agent.model.' .. opt.model)({
          nInputs = envDetails.nbStates,
          nOutputs = envDetails.nbActions,
          nHiddenLayerSize = opt.nHiddenLayerSize,
@@ -27,7 +27,7 @@ local function getAgent(opt)
       })
    end
 
-   policy = require('rl.agent.policy')[opt.policy]({
+   policy = require('twrl.agent.policy')[opt.policy]({
       client = opt.client,
       instanceID = instanceID,
       envDetails = envDetails,
@@ -41,7 +41,7 @@ local function getAgent(opt)
       randomActionSampler = randomActionSampler
    })
 
-   local learn = require('rl.agent.learningUpdate.' .. opt.learningUpdate)({
+   local learn = require('twrl.agent.learningUpdate.' .. opt.learningUpdate)({
       model = model,
       envDetails = envDetails,
       tdLearnUpdate = opt.tdLearnUpdate,

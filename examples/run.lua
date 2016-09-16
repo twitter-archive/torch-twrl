@@ -62,4 +62,4 @@ local nSteps, nIterations = params.nSteps, params.nIterations
 params.outdir = logDir .. '/gym'
 
 -- run test
-local performance = require 'rl.experiment'(env, agent, nSteps, nIterations, params)
+local performance = require 'twrl.experiment'(env, agent, nSteps, nIterations, params)

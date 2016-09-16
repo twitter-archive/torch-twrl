@@ -1,15 +1,15 @@
-local rl = {}
+local twrl = {}
 
 -- Meta info
-rl.VERSION = '0.1'
-rl.LICENSE = 'MIT'
+twrl.VERSION = '0.1'
+twrl.LICENSE = 'MIT'
 
 -- Utility packages 
-rl.agent = require 'rl.agent'
-rl.util = require 'rl.util'
-rl.perf = require 'rl.perf'
-rl.experiment = require 'rl.experiment'
-rl.gymClient = require 'rl.binding-lua.gym_http_client'
+twrl.agent = require 'twrl.agent'
+twrl.util = require 'twrl.util'
+twrl.perf = require 'twrl.perf'
+twrl.experiment = require 'twrl.experiment'
+twrl.gymClient = require 'twrl.binding-lua.gym_http_client'
 
 -- Return package
-return rl
+return twrl

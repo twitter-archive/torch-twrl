@@ -1,6 +1,6 @@
 local function experiment(envName, agent, nSteps, nIterations, opt)
-   local util = require 'rl.util'()
-   local gymClient = require 'rl.binding-lua.gym_http_client'
+   local util = require 'twrl.util'()
+   local gymClient = require 'twrl.binding-lua.gym_http_client'
    local opt = opt or {}
    local base = 'http://127.0.0.1:5000'
    local client = gymClient.new(base)
@@ -11,7 +11,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
    local resume = opt.resume
    local renderAllSteps = opt.renderAllSteps
    local render = renderAllSteps == 'true' and true or false
-   local perf = require 'rl.perf'({nIterations = nSteps, windowSize = opt.windowSize})
+   local perf = require 'twrl.perf'({nIterations = nSteps, windowSize = opt.windowSize})
 
    local function run()
       client:env_monitor_start(instanceID, outdir, force, resume, video)
@@ -24,7 +24,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
          agentOpt.learningUpdate = agent.learningUpdate
          agentOpt.envDetails = util.getStateAndActionSpecs(agentOpt.stateSpace, agentOpt.actionSpace)
          function agentOpt.randomActionSampler() return client:env_action_space_sample(instanceID) end
-      local agent = require 'rl.agent.baseAgent'(agentOpt)
+      local agent = require 'twrl.agent.baseAgent'(agentOpt)
       local iterPerformance = {}
 
       for nIter = 1, nIterations do
@@ -50,7 +50,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
       client:env_monitor_close(instanceID)
 
       if opt.uploadResults == 'true' then
-         print('Uploading results, check server for URL.')
+         print('Uploading results, check server for URL')
          -- Upload to the scoreboard, OPENAI_GYM_API_KEY must be set
          client:upload(outdir)
       end
