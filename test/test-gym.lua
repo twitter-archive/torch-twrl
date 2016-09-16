@@ -46,7 +46,7 @@ function mujoco.testMujoco()
 end
 
 function experiment.badExperimentCall()
-   local performance = require 'rl.experiment'()
+   local performance = require 'twrl.experiment'()
    tester:eq(performance, {}, "bad experiment call should fail with bad settings ")
 end
 
@@ -60,7 +60,7 @@ function experiment.randomNoLearningNoModel()
    }
    local nSteps = 2
    local nIterations = 2
-   local performance = require 'rl.experiment'(env, agent, nSteps, nIterations, params)
+   local performance = require 'twrl.experiment'(env, agent, nSteps, nIterations, params)
    tester:eq(performance.iteration, 2, "basic experiment should run")
 end
 

@@ -6,7 +6,7 @@ local tilecoding = torch.TestSuite()
 local tester = torch.Tester()
 
 -- Load all 
-local util = require 'rl.util'()
+local util = require 'twrl.util'()
 
 function base.torchTensor()
    local a = {2, torch.Tensor{1, 2, 2}}
@@ -19,7 +19,7 @@ function tilecoding.tilecodeConsistent()
    local numTiles = 32
    local memorySize = numTiles * numTiles
    local stateScalingFactor = {1, 1}
-   local tc = require 'rl.agent.model.tilecoding'(({
+   local tc = require 'twrl.agent.model.tilecoding'(({
       numTilings = numTilings, 
       memorySize = memorySize, 
       scaleFactor = stateScalingFactor
@@ -35,7 +35,7 @@ function tilecoding.tilecodePredictable()
    local numTiles = 32
    local memorySize = numTiles * numTiles
    local stateScalingFactor = {1, 1}
-   local tc = require 'rl.agent.model.tilecoding'(({
+   local tc = require 'twrl.agent.model.tilecoding'(({
       numTilings = numTilings, 
       memorySize = memorySize, 
       scaleFactor = stateScalingFactor
@@ -47,25 +47,25 @@ function tilecoding.tilecodePredictable()
 end
 
 function performance.reset()
-   local perf = require 'rl.perf'()
+   local perf = require 'twrl.perf'()
    local emptyTable = perf.reset()
    tester:eq(emptyTable, {}, "performance: reset failed")
 end
 
 function performance.addRewardTerminal()
-   local perf = require 'rl.perf'()
+   local perf = require 'twrl.perf'()
    local traj, trajs = perf.addReward(1, 1, true)
    tester:eq(traj, {}, "performance: add reward terminal failed")
 end
 
 function performance.addRewardNonTerminal()
-   local perf = require 'rl.perf'()
+   local perf = require 'twrl.perf'()
    local traj, trajs = perf.addReward(1, 1, false)
    tester:eq(traj, {1}, "performance: add reward non-terminal failed")
 end
 
 function performance.getSummary()
-   local perf = require 'rl.perf'({windowSize = 10})
+   local perf = require 'twrl.perf'({windowSize = 10})
    local _, _ = perf.addReward(1, 0, false)
    local _, _ = perf.addReward(1, 0, false)
    local _, _ = perf.addReward(1, 1, true)

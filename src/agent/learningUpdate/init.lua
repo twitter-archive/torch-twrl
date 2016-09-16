@@ -1,8 +1,8 @@
 local learningUpdate = {
-   noLearning = require 'rl.agent.learningUpdate.noLearning',
-   reinforce = require 'rl.agent.learningUpdate.reinforce',
-   tdLambda = require 'rl.agent.learningUpdate.tdLambda',
-   util = require 'rl.agent.learningUpdate.util'
+   noLearning = require 'twrl.agent.learningUpdate.noLearning',
+   reinforce = require 'twrl.agent.learningUpdate.reinforce',
+   tdLambda = require 'twrl.agent.learningUpdate.tdLambda',
+   util = require 'twrl.agent.learningUpdate.util'
 }
 
 return learningUpdate

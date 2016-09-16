@@ -1,8 +1,8 @@
 local agent = {
-   baseAgent = require 'rl.agent.baseAgent',
-   learningUpdate = require 'rl.agent.learningUpdate',
-   model = require 'rl.agent.model',
-   policy = require 'rl.agent.policy'
+   baseAgent = require 'twrl.agent.baseAgent',
+   learningUpdate = require 'twrl.agent.learningUpdate',
+   model = require 'twrl.agent.model',
+   policy = require 'twrl.agent.policy'
 }
 
 return agent
