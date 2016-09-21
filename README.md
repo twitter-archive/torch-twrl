@@ -100,7 +100,7 @@ Dependencies
 ------------
 Testing of RL development is a tricky endeavor, it requires well established, unified, baselines and a large community of active developers. The OpenAI Gym provides a great set of example environments for this purpose. Link: https://github.com/openai/gym
 
-The OpenAI Gym is written in python and it expects algorithms which interact with its various environments to be as well. torch-twrl is compatible with the OpenAI Gym with the use of a modified Gym HTTP API, based on the original code from OpenAI; [gym-http-api](https://github.com/korymath/gym-http-api) is a submodule of torch-twrl.
+The OpenAI Gym is written in python and it expects algorithms which interact with its various environments to be as well. torch-twrl is compatible with the OpenAI Gym with the use of a Gym HTTP API from OpenAI; [gym-http-api](https://github.com/openai/gym-http-api) is a submodule of torch-twrl.
 
 All Lua dependencies should be installed on your first build.
 
