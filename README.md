@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.com/twitter/torch-twrl.svg?token=JUyATyLn3rqyEx2nzMk9&branch=master)](https://travis-ci.com/twitter/torch-twrl) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/twitter/torch-twrl/blob/master/LICENSE)
 
 # torch-twrl: Reinforcement Learning in Torch
+
+[![Join the chat at https://gitter.im/torch-twrl/Lobby](https://badges.gitter.im/torch-twrl/Lobby.svg)](https://gitter.im/torch-twrl/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 torch-twrl is an RL framework built in Lua/Torch by Twitter.
 
 Installation
