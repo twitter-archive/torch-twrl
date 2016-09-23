@@ -1,7 +1,7 @@
 package = "twrl"
 version = "scm-1"
 source = {
-   url = "https://github.com/twitter/torch-twrl.git"
+   url = "git://github.com/twitter/torch-twrl.git"
 }
 description = {
    summary = "Reinforcement Learning for Torch and Lua",
