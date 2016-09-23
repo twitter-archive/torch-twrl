@@ -1,7 +1,7 @@
 package = "twrl"
 version = "scm-1"
 source = {
-   url = "git://github.com/twitter/torch-twrl.git"
+   url = "gitrec://github.com/twitter/torch-twrl.git"
 }
 description = {
    summary = "Reinforcement Learning for Torch and Lua",
@@ -14,6 +14,7 @@ description = {
 }
 dependencies = {
    "lua >= 5.1",
+   "luarocks-fetch-gitrec",
    "torch >= 7.0",
    "nn >= 1.0.4",
    "penlight >= 1.4.1",
