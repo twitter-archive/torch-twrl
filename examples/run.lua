@@ -60,7 +60,7 @@ local agent = {
 -- test details
 local nSteps, nIterations = params.nSteps, params.nIterations
 -- gym data dump directory
-params.outdir = logDir .. '/gym'
+params.outdir = logDir .. '/'
 
 -- run test
 local performance = require 'twrl.experiment'(env, agent, nSteps, nIterations, params)
