@@ -59,7 +59,8 @@ local function perf(opt)
          stdEpRewardWindow = stdEpRewardWindow
       }
       if nIter % windowSize == 0 then
-         print(summary)
+         for key,value in pairs(summary) do print(key,value) end
+         print('*****************')
       end
       return summary
    end
