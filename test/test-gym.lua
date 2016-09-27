@@ -65,7 +65,7 @@ function experiment.randomNoLearningNoModel()
 end
 
 tester:add(api)
-tester:add(atari):disable('testAtari')
-tester:add(mujoco):disable('testMujoco')
+tester:add(atari)
+tester:add(mujoco)
 tester:add(experiment)
 tester:run()
