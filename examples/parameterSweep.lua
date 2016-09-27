@@ -15,7 +15,7 @@ params = {
    weightDecay = 0,
    windowSize = 10,
    nSteps = 1000,
-   nIterations = 10,
+   nIterations = 1000,
    video = 0,
    optimType = 'rmsprop',
    verboseUpdate = 'false',
@@ -24,17 +24,6 @@ params = {
    learningType = 'batch',
    gymHttpServer = 'http://127.0.0.1:5000'
 }
-
--- Convert from table to CSV string
-function toCSV(tt)
-  local s = ""
--- ChM 23.02.2014: changed pairs to ipairs 
--- assumption is that fromCSV and toCSV maintain data as ordered array
-  for _,p in ipairs(tt) do  
-    s = s .. "," .. escapeCSV(p)
-  end
-  return string.sub(s, 2) -- remove first comma
-end
 
 stepsizeStart = {0.3, 0.2, 0.1, 0.01, 0.001}
 
@@ -71,5 +60,3 @@ for i = 1, #stepsizeStart do
       stepResults['meanEpRewardWindow'] = performance.meanEpRewardWindow
    table.insert(results, stepResults)
 end
-
-print(results)
