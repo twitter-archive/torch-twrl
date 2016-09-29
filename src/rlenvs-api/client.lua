@@ -54,13 +54,26 @@ end
 function rlEnvsClient:env_observation_space_info(instance_id)
     local stateSpec = self.env:getStateSpec()
     local state = {}
-    state['name'] = stateSpec[1] == 'int' and 'Discrete' or 'Box'
-    state['shape'] = stateSpec[2]
-    local low = {}
-    local high = {}
-    state['low'] = low
-    state['high'] = high
-    return stateSpec
+    if torch.type(stateSpec[1]) ~= 'table' then
+        -- it is one entry not multiple
+        state['name'] = stateSpec[1] == 'int' and 'Discrete' or 'Box'
+        state['shape'] = stateSpec[2]
+        state['low'] = { stateSpec[3][1] }
+        state['high'] = { stateSpec[3][2] }
+    else
+        -- multiple entries
+        local low = {}
+        local high = {}
+        for index, value in ipairs(stateSpec) do
+            state['name'] = value[1] == 'int' and 'Discrete' or 'Box' -- TODO hoping here that they all have the same discrete or box name
+            low[#low + 1] = value[3][1] or math.huge
+            high[#high + 1] = value[3][2] or math.huge
+            state['shape'] = index -- TODO the size will be given by this index, we assume each state is a value
+        end
+        state['low'] = low
+        state['high'] = high
+    end
+    return state
 end
 
 return m
