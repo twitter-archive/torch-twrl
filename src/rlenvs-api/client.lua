@@ -41,7 +41,7 @@ function rlEnvsClient:env_action_space_info(instance_id)
     local actionSpec = self.env:getActionSpec()
     local action = {}
     action['name'] = actionSpec[1] == 'int' and 'Discrete' or 'Box'
-    action['n'] = #actionSpec[3]
+    action['n'] = actionSpec[3][2] -- TODO we just select the MAX value
     return action
 end
 
