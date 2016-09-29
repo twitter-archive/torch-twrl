@@ -9,3 +9,4 @@ ADD_TORCH_PACKAGE(twrl "" "${luasrc}")
 
 INSTALL(DIRECTORY "src/agent" DESTINATION "${Torch_INSTALL_LUA_PATH_SUBDIR}/twrl")
 INSTALL(DIRECTORY "src/gym-http-api/binding-lua" DESTINATION "${Torch_INSTALL_LUA_PATH_SUBDIR}/twrl")
+INSTALL(DIRECTORY "src/rlenvs-api/" DESTINATION "${Torch_INSTALL_LUA_PATH_SUBDIR}/twrl")
