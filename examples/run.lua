@@ -38,13 +38,14 @@ local params = lapp[[
 ]]
 
 -- Get time, build log folder
-longDate = os.date("%Y-%m-%dT%H:%m:%S.000")
-logDir = '../../logs/gym/' .. longDate .. '-' .. '-' .. params.policy .. '-' .. params.learningUpdate .. '-' .. params.env
+local longDate = os.date("%Y-%m-%dT%H%m%S")
+local uniqueName = longDate .. '-' .. '-' .. params.policy .. '-' .. params.learningUpdate .. '-' .. params.env .. '-stepsizeStart-' .. params.stepsizeStart
+local logDir = '../../logs/gym/' .. uniqueName
 params.rundir = logDir
 paths.mkdir(logDir)
 
 -- create log file
-cmd = torch.CmdLine()
+local cmd = torch.CmdLine()
 cmd:log(logDir .. '/log', params)
 
 -- environment
@@ -59,6 +60,7 @@ local agent = {
 
 -- test details
 local nSteps, nIterations = params.nSteps, params.nIterations
+
 -- gym data dump directory
 params.outdir = logDir .. '/'
 

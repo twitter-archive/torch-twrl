@@ -9,3 +9,6 @@ th run.lua \
    -policy random \
    -learningUpdate noLearning \
    -model noModel \
+   -video 0 \
+   -renderAllSteps false \
+   -nIterations 10 \
