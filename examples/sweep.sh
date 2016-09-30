@@ -1,7 +1,7 @@
 #! /bin/bash
 step_sizes=(0.3 0.25 0.2 0.15 0.1 0.05 0.01 0.005 0.001)
 COUNTER=0
-while [ $COUNTER -lt 101 ]; do
+while [ $COUNTER -lt 3 ]; do
 echo Iteration number $COUNTER
 for i in ${step_sizes[@]}; do
     echo ${i}
@@ -27,14 +27,15 @@ for i in ${step_sizes[@]}; do
        -weightDecay 0 \
        -windowSize 10 \
        -nSteps 1000 \
-       -nIterations 500 \
+       -nIterations 200 \
        -video 0 \
        -optimType rmsprop \
        -verboseUpdate false \
        -uploadResults false \
        -renderAllSteps false \
        -learningType batch \
-       -gymHttpServer http://127.0.0.1:5000
+       -gymHttpServer http://127.0.0.1:5000 \
+       -experimentLogName 20160930sweep
     # close the server cleanly
     kill $SERVER_PID
     sudo lsof -i :5000 | grep 'python\|Python' | cut -d " " -f3 | xargs kill -9

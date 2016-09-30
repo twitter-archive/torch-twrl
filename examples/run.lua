@@ -35,12 +35,13 @@ local params = lapp[[
    --optimType                (default "rmsprop")               Optimization to use (rmsprop, adam, sgd,...)
    --verboseUpdate            (default true)                    Print details of the learning update
    --gymHttpServer            (default "http://127.0.0.1:5000") Address of Gym Server (https://github.com/openai/gym-http-api)
+   --experimentLogName        (default "experiment")            Name of the experiment for log folder structure
 ]]
 
 -- Get time, build log folder
 local longDate = os.date("%Y-%m-%dT%H%m%S")
 local uniqueName = longDate .. '-' .. '-' .. params.policy .. '-' .. params.learningUpdate .. '-' .. params.env .. '-stepsizeStart-' .. params.stepsizeStart
-local logDir = '../logs/gym/' .. uniqueName
+local logDir = '../logs/gym/' .. params.experimentLogName .. '/' .. uniqueName
 params.rundir = logDir
 paths.mkdir(logDir)
 
