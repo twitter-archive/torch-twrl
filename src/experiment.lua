@@ -47,7 +47,6 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
       end
 
       -- Dump result info to disk and close the Gym monitor
-      client:env_close(instanceID)
       client:env_monitor_close(instanceID)
 
       if opt.uploadResults == 'true' then
