@@ -1,4 +1,5 @@
 local params = lapp[[
+   -b, --base                 (default "gym")                   Use "gym" or "rlenvs"
    -e, --env                  (default "CartPole-v0")           Environment (http://gym.openai.com/envs)
    -p, --policy               (default "categorical")           Agent policy
    -l, --learningUpdate       (default "reinforce")             Agent learning update

@@ -1,10 +1,17 @@
 local function experiment(envName, agent, nSteps, nIterations, opt)
    local util = require 'twrl.util'()
-   local gymClient = require 'twrl.binding-lua.gym_http_client'
    local opt = opt or {}
-   gymHttpServer = opt.gymHttpServer or 'http://127.0.0.1:5000'
-   local client = gymClient.new(gymHttpServer)
-   local instanceID = client:env_create(envName)
+   local client, instanceID
+   if opt.base == 'gym' then
+       local gymClient = require 'twrl.binding-lua.gym_http_client'
+       gymHttpServer = opt.gymHttpServer or 'http://127.0.0.1:5000'
+       client = gymClient.new(gymHttpServer)
+       instanceID = client:env_create(envName)
+   else
+       local rlenvsClient = require 'twrl.client'
+       client = rlenvsClient.new()
+       instanceID = client:env_create(envName, opt)
+   end
    local outdir = opt.outdir
    local video = opt.video
    local force = opt.force
