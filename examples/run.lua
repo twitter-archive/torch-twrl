@@ -40,7 +40,7 @@ local params = lapp[[
 -- Get time, build log folder
 local longDate = os.date("%Y-%m-%dT%H%m%S")
 local uniqueName = longDate .. '-' .. '-' .. params.policy .. '-' .. params.learningUpdate .. '-' .. params.env .. '-stepsizeStart-' .. params.stepsizeStart
-local logDir = '../../logs/gym/' .. uniqueName
+local logDir = '../logs/gym/' .. uniqueName
 params.rundir = logDir
 paths.mkdir(logDir)
 

@@ -1,16 +1,16 @@
 #! /bin/bash
-
-step_sizes=(0.3 0.2 0.1 0.01 0.001)
-
+source ../../venv/bin/activate
+step_sizes=(0.3 0.25 0.2 0.15 0.1 0.05 0.01 0.005 0.001)
+COUNTER=0
+while [ $COUNTER -lt 101 ]; do
+echo Iteration number $COUNTER
 for i in ${step_sizes[@]}; do
 	echo ${i}
-	
+	lsof -i :5000 | grep python | cut -d " " -f3 | xargs kill -9
 	# start the server
 	python ../src/gym-http-api/gym_http_server.py & SERVER_PID=$!
-	
 	# give the server time to start
 	sleep 2
-	
 	# run the experiment
 	th run.lua \
 	   -env 'CartPole-v0' \
@@ -28,7 +28,7 @@ for i in ${step_sizes[@]}; do
 	   -weightDecay 0 \
 	   -windowSize 10 \
 	   -nSteps 1000 \
-	   -nIterations 10 \
+	   -nIterations 500 \
 	   -video 0 \
 	   -optimType rmsprop \
 	   -verboseUpdate false \
@@ -36,7 +36,9 @@ for i in ${step_sizes[@]}; do
 	   -renderAllSteps false \
 	   -learningType batch \
 	   -gymHttpServer http://127.0.0.1:5000
-
 	# close the server cleanly
 	kill $SERVER_PID
+	lsof -i :5000 | grep python | cut -d " " -f3 | xargs kill -9
+done
+let COUNTER=COUNTER+1
 done
