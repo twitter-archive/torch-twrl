@@ -1,10 +1,11 @@
 #! /bin/bash
 step_sizes=(0.3 0.25 0.2 0.15 0.1 0.05 0.01 0.005 0.001)
 COUNTER=0
-while [ $COUNTER -lt 3 ]; do
+while [ $COUNTER -lt 5 ]; do
 echo Iteration number $COUNTER
 for i in ${step_sizes[@]}; do
     echo ${i}
+    ## may need to force pipe password into sudo, like this... echo 'password' | sudo -kS ls
     sudo lsof -i :5000 | grep 'python\|Python' | cut -d " " -f3 | xargs kill -9
     # start the server
     python ../src/gym-http-api/gym_http_server.py & SERVER_PID=$!
@@ -27,7 +28,7 @@ for i in ${step_sizes[@]}; do
        -weightDecay 0 \
        -windowSize 10 \
        -nSteps 1000 \
-       -nIterations 200 \
+       -nIterations 1000 \
        -video 0 \
        -optimType rmsprop \
        -verboseUpdate false \
@@ -35,7 +36,7 @@ for i in ${step_sizes[@]}; do
        -renderAllSteps false \
        -learningType batch \
        -gymHttpServer http://127.0.0.1:5000 \
-       -experimentLogName 20160930sweep
+       -experimentLogName 20160930sweeplong
     # close the server cleanly
     kill $SERVER_PID
     sudo lsof -i :5000 | grep 'python\|Python' | cut -d " " -f3 | xargs kill -9
