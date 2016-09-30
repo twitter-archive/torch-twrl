@@ -15,6 +15,7 @@ function rlEnvsClient:env_create(env_id, opts)
     self.stepCounter = 1
     local Env = require('rlenvs.' .. env_id)
     self.env = Env(opts)
+    if opts.renderAllSteps then require 'image' self.qt = pcall(require, 'qt') end
     return self.env
 end
 
@@ -34,18 +35,23 @@ end
 
 function rlEnvsClient:env_reset(instance_id, opts)
     local observation = self.env:start(opts)
+    self.window = self.qt and image.display({ image = observation, zoom = 10 })
     return observation
 end
 
 function rlEnvsClient:env_step(instance_id, action, render, video_callable)
     local reward, obs, done = self.env:step(action)
     local endOfSteps = self.stepCounter % self.nSteps == 0
-    if self.nSteps and endOfSteps then
-        done = true
-    elseif not endOfSteps then
-        done = false
+    if self.nSteps then
+        if done then
+            self:env_reset(instance_id)
+        end
+        done = endOfSteps
     end
     self.stepCounter = self.stepCounter + 1
+    if self.qt then
+        image.display({ image = obs, zoom = 10, win = self.window })
+    end
     return obs, reward, done
 end
 
@@ -68,8 +74,8 @@ function rlEnvsClient:env_observation_space_info(instance_id)
     local state = {}
     if torch.type(stateSpec[1]) ~= 'table' then
         -- it is one entry not multiple
-        state['name'] = stateSpec[1] == 'int' and 'Discrete' or 'Box'
-        state['shape'] = { stateSpec[2] }
+        state['shape'] = stateSpec[2]
+        state['name'] = state['shape'] == 1 and 'Discrete' or 'Box'
         state['low'] = { stateSpec[3][1] }
         state['high'] = { stateSpec[3][2] }
     else
@@ -77,11 +83,11 @@ function rlEnvsClient:env_observation_space_info(instance_id)
         local low = {}
         local high = {}
         for index, value in ipairs(stateSpec) do
-            state['name'] = value[1] == 'int' and 'Discrete' or 'Box' -- TODO hoping here that they all have the same discrete or box name
             low[#low + 1] = value[3][1] or math.huge
             high[#high + 1] = value[3][2] or math.huge
             state['shape'] = { index } -- TODO the size will be given by this index, we assume each state is a value
         end
+        state['name'] = 'Box' -- TODO hoping here that they all have the same discrete or box name
         state['low'] = low
         state['high'] = high
     end
