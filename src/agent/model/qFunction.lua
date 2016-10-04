@@ -30,6 +30,7 @@ local function getModel(opt)
 
    local function getFeatures(state, action)
       -- TODO: fix the box actions to append to floats
+      -- TODO: should incorporate statescalingFactor to normalize state observations 
       floats = state
       if envDetails.actionType == 'Discrete' then
          ints = {action}
