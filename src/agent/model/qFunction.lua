@@ -12,6 +12,7 @@ local function getModel(opt)
       local stateMins = envDetails.stateSpec.low
       local stateScalingFactor = {}
       for i = 1, nbStates do
+         -- ensure that the environment limits are not infinite for scaling
          if (envDetails.stateSpec.low[i] and envDetails.stateSpec.high[i]) and (envDetails.stateSpec.high[i] < 1000) then
             stateScalingFactor[i] = (envDetails.stateSpec.high[i] - envDetails.stateSpec.low[i]) / numTilings
          else
@@ -23,26 +24,31 @@ local function getModel(opt)
 
    local stateScalingFactor, stateMins = getStateMinsAndScaling(envDetails, numTilings)
    local memorySize = numTiles * numTiles
-   
-   local tc = require 'twrl.agent.model.tilecoding'({numTilings = numTilings, memorySize = memorySize, scaleFactor = stateScalingFactor, stateMins = stateMins})
-   
-   local weights = torch.FloatTensor(numTilings * memorySize * nbActions):zero():fill(initialWeightVal)
-   local eligibility = torch.FloatTensor(numTilings * memorySize * nbActions):zero():fill(0)
+   local tc = require 'twrl.agent.model.tilecoding'({numTilings = numTilings, memorySize = memorySize}) 
+   local weights = torch.FloatTensor((numTilings * memorySize) + 1):zero():fill(initialWeightVal)
+   local eligibility = torch.FloatTensor((numTilings * memorySize) + 1):zero():fill(0)
 
    local function getFeatures(state, action)
-      -- get features indecies of Q(s,a) given state and action
-      -- featurize the state with the given tilecoder
-      local obsv = tc.feature(state)
-      local featIdx = {}
-      for tiling = 1,numTilings do
-         featIdx[tiling] = obsv[tiling] + (action * numTilings * memorySize) + 1
+      -- TODO: fix the box actions to append to floats
+      floats = state
+      if envDetails.actionType == 'Discrete' then
+         ints = {action}
+      else
+         table.insert(floats, action)
       end
+      features = tc.tiles(memorySize, numTilings, floats, ints)
+      featIdx = {}
+      for tiling = 1, numTilings do
+         featIdx[tiling] = features[tiling] + ((tiling-1) * memorySize) + 1
+      end
+      -- add a baseline feature
+      table.insert(featIdx, 1, 1)
       return featIdx
    end
 
    -- define accesory methods for the Q function
    local function estimateQ(state, action, w)
-      -- sum weights for Q(s,a) for single action
+      -- estimate Q(s,a) as sum of corresponding weights
       local featIdx = getFeatures(state, action)
       local weightSum = 0
       for idx = 1, #featIdx do

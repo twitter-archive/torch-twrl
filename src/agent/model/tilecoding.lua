@@ -3,9 +3,7 @@ local function tilecoding(opt)
    -- Set a random seed for consistent hashing
    math.randomseed(65597)
    local numTilings = opt.numTilings
-   local scaleFactor = opt.scaleFactor
    local memorySize = opt.memorySize
-   local stateMins = opt.stateMins or {}
    local sizeVal = opt.sizeVal or 2048
    local maxLongInteger = 2147483647
    local maxLongIntegerBy4 = math.floor(maxLongInteger/4)
@@ -24,37 +22,30 @@ local function tilecoding(opt)
          rtIdx = ((coordinates[i] + (i*increment)) % sizeVal) + 1
          res = res + randomTable[rtIdx]
       end
-      return res % m
+      -- ensure there is no tile at index 0
+      return (res % m) + 1
    end
    local tc = {}
-   function tc.feature(s)
-      local floats = {}
-      assert(#s==#scaleFactor,"Dimension of scaling factor and feature vectors must match!")
-      for i=1,#s do
-         if stateMins[i] then
-            floats[i] = (s[i] + stateMins[i]) / scaleFactor[i]
-         else
-            floats[i] = s[i] / scaleFactor[i]
-         end
-      end
-      local F = tc.tiles(memorySize, numTilings, floats)
-      return F
-   end
-   function tc.tiles(memorySize, numTilings, floats)
-      local coords = {}
+   function tc.tiles(memorySize, numTilings, floats, ints)
+      local ints = ints or {}
       local Tiles = {}
       local _qstate = {}
-      local b = 0
       for i = 1, #floats do
          _qstate[i] = math.floor(floats[i] * numTilings)
       end
-      for tiling = 1,numTilings do -- for each tiling
-         local tilingX2 = tiling*2
-         table.insert(coords,tiling)
-         b = tiling
-         for q = 1,#_qstate do
-            table.insert(coords, math.floor((_qstate[q] + b) / numTilings))
+      -- for each tiling
+      for tiling = 1, numTilings do
+         local tilingX2 = tiling * 2
+         local coords = {tiling}
+         local b = tiling
+         -- building hashable float to coords
+         for q = 1, #_qstate do
+            table.insert(coords, math.floor( (_qstate[q] + b) / numTilings))
             b = b + tilingX2
+         end
+         -- extend hashable coords with ints
+         for i = 1, #ints do
+            table.insert(coords, ints[i])
          end
          table.insert(Tiles, hashcoords(coords, memorySize))
       end

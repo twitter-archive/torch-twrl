@@ -33,6 +33,7 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
          local state = client:env_reset(instanceID)
          local action = agent.selectAction(client, instanceID, state)
          for i = 1, nSteps do
+            action = 1
             nextState, reward, terminal, _ = client:env_step(instanceID, action, render)
             if i == nSteps then terminal = true end
             perf.addReward(nIter, reward, terminal)
@@ -58,15 +59,20 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
    end
    -- protect the run call to handle errors
    local success, performance
+   function errorHandle(error)
+      print('Error: Experiment was not successfully run.')
+      print(error)
+      print(debug.traceback())
+      return {}
+   end
    if instanceID ~= nil then
-      success, performance = pcall(run)
+      success, performance, ret = xpcall(run, errorHandle)
       if success == false then
-         print(performance)
-         print('Error: Experiment was not successfully run.')
          performance = {}
       end
    else
       print('Error: improper configuration. There may be no Gym server started, or your experiment definition may be incomplete.')
+      print('instanceID is nil')
       performance = {}
    end
    return performance
