@@ -2,3 +2,4 @@
 build/*
 .DS_Store
 venv/
+examples/test.sh
