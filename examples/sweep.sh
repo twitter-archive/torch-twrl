@@ -31,7 +31,7 @@ for i in ${step_sizes[@]}; do
        -nIterations 1000 \
        -video 0 \
        -optimType rmsprop \
-       -verboseUpdate false \
+       -verboseUpdate true \
        -uploadResults false \
        -renderAllSteps false \
        -learningType batch \

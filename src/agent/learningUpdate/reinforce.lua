@@ -119,7 +119,7 @@ local function getLearningUpdate(opt)
       optimConfig.learningRate = stepsizeStart * ((nIterations - nIter)) / nIterations
       local params, newObj = optimizer(feval, params, optimConfig)
 
-      if verboseUpdate == 'true' then
+      if (verboseUpdate == 'true') or (verboseUpdate == true) then
          -- Print some learning update details
          print('Learning update at episode: ' .. nIter)
          print('Learning rate: ' .. optimConfig.learningRate)
