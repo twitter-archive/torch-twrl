@@ -7,7 +7,7 @@ local params = lapp[[
    -i, --nIterations          (default 1000)                    Number of training iterations
    -v, --video                (default 100)                     Record a video every N steps, or false
    -r, --renderAllSteps       (default false)                   Render every step to monitor performance
-   -f, --force                (default true)                    Force overwrite of the data log
+   -f, --force                (default false)                    Force overwrite of the data log
    -u, --resume               (default false)                   Resume existing experiment
    -p, --timestepsPerBatch    (default 1000)                    Number of steps in a training batch (for batch learning update)
    -z, --stepsizeStart        (default 0.3)                     Starting step size (alpha)
@@ -33,7 +33,7 @@ local params = lapp[[
    --tdLearnUpdate            (default "qLearning")             qLeanring or SARSA td-learning update
    --windowSize               (default 10)                      Performance metric window size
    --optimType                (default "rmsprop")               Optimization to use (rmsprop, adam, sgd,...)
-   --verboseUpdate            (default true)                    Print details of the learning update
+   --verboseUpdate            (default false)                    Print details of the learning update
    --gymHttpServer            (default "http://127.0.0.1:5000") Address of Gym Server (https://github.com/openai/gym-http-api)
    --experimentLogName        (default "experiment")            Name of the experiment for log folder structure
 ]]
