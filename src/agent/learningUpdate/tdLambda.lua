@@ -18,7 +18,6 @@ local function getLearningUpdate(opt)
       local nextState = transition.nextState
       local nextAction = transition.nextAction
       local terminal = transition.terminal
-
       local delta = 0
       if terminal == true then
          model.eligibility:zero()
@@ -27,10 +26,10 @@ local function getLearningUpdate(opt)
          if tdLearnUpdate == 'qLearning' then
             local qVals = model.estimateAllQ(nextState, model.weights)
             local maxQ, maxIdx = qVals:max(1)
-            delta = reward - model.estimateQ(state, action, model.weights) + gamma * maxQ[1]
+            delta = reward + (gamma * maxQ[1]) - model.estimateQ(state, action, model.weights)
          elseif tdLearnUpdate == 'SARSA' then
             local qVal = model.estimateQ(nextState, nextAction, model.weights)
-            delta = reward - model.estimateQ(state, action, model.weights) + gamma * qVal
+            delta = reward + (gamma * qVal) - model.estimateQ(state, action, model.weights)
          end
          model.weights = model.weights + model.eligibility * alpha * delta
       end
