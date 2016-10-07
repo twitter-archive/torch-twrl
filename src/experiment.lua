@@ -33,7 +33,6 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
          local state = client:env_reset(instanceID)
          local action = agent.selectAction(client, instanceID, state)
          for i = 1, nSteps do
-            action = 1
             nextState, reward, terminal, _ = client:env_step(instanceID, action, render)
             if i == nSteps then terminal = true end
             perf.addReward(nIter, reward, terminal)
