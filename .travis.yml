@@ -48,6 +48,7 @@ before_script:
    - ${INSTALL_PREFIX}/bin/luarocks install nn
    - git clone https://github.com/torch/xlua && cd xlua && ${INSTALL_PREFIX}/bin/luarocks make xlua-1.1-0.rockspec
    - ${INSTALL_PREFIX}/bin/luarocks install optim
+   - ${INSTALL_PREFIX}/bin/luarocks install hash
    - if [[ $TORCH_LUA_VERSION != 'LUAJIT21' && $TORCH_LUA_VERSION != 'LUAJIT20' ]]; then ${INSTALL_PREFIX}/bin/luarocks install luaffi; fi
    - cd $ROOT_TRAVIS_DIR
    - export LD_LIBRARY_PATH=${INSTALL_PREFIX}/lib:$LD_LIBRARY_PATH

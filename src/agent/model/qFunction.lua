@@ -28,7 +28,7 @@ local function getModel(opt)
          featIdx[tiling] = features[tiling] + ((tiling-1) * memorySize) + 1
       end
       -- add a baseline feature
-      -- table.insert(featIdx, 1, 1)
+      table.insert(featIdx, 1, 1)
       return featIdx
    end
 
@@ -68,8 +68,8 @@ local function getModel(opt)
 
    return { 
       weights = weights,
-      -- eligibility = eligibility,
-      -- accumulateEligibility = accumulateEligibility,
+      eligibility = eligibility,
+      accumulateEligibility = accumulateEligibility,
       estimateQ = estimateQ,
       estimateAllQ = estimateAllQ,
       getFeatures = getFeatures
