@@ -18,6 +18,7 @@ local function getPolicy(opt)
          model.eligibility:zero()
       else
          local qVals = model.estimateAllQ(state, model.weights)
+         print(qVals)
          local maxQ, maxIdx = qVals:max(1)
          action = maxIdx[1] - 1
          -- actions are 0 based for gym
