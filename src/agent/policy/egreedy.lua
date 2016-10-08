@@ -15,12 +15,13 @@ local function getPolicy(opt)
       local action
       if math.random() < epsilon then
          action = randomActionSampler()
-         model.eligibility:zero()
+         -- model.eligibility:zero()
       else
          local qVals = model.estimateAllQ(state, model.weights)
          local maxQ, maxIdx = qVals:max(1)
          action = maxIdx[1] - 1
-         model.eligibility = model.eligibility * gamma * lambda
+         -- actions are 0 based for gym
+         -- model.eligibility = model.eligibility * gamma * lambda
       end
       if epsilon > epsilonMinValue then
          epsilon = epsilon * epsilonDecayRate

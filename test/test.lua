@@ -18,8 +18,7 @@ function tilecoding.tilecodeConsistent()
    local numTilings = 8
    local numTiles = 32
    local memorySize = numTiles * numTiles
-   local stateScalingFactor = {1, 1}
-   local tc = require 'twrl.agent.model.tilecoding'({numTilings = numTilings, memorySize = memorySize})
+   local tc = require 'twrl.agent.model.tilecoding'({})
    local state1 = {3.6, 7.21}
    local tiles1 = tc.tiles(memorySize, numTilings, state1)
    local state2 = {3.7, 7.21}
@@ -31,7 +30,7 @@ function tilecoding.tilecodePredictable()
    local numTilings = 8
    local numTiles = 32
    local memorySize = numTiles * numTiles
-   local tc = require 'twrl.agent.model.tilecoding'({numTilings = numTilings, memorySize = memorySize})
+   local tc = require 'twrl.agent.model.tilecoding'({})
    local state = {3.6, 7.21}
    local tiles1 = tc.tiles(memorySize, numTilings, state)
    local tiles2 = tc.tiles(memorySize, numTilings, state)

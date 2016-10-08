@@ -20,9 +20,11 @@ local function getLearningUpdate(opt)
       local terminal = transition.terminal
       local delta = 0
       if terminal == true then
-         model.eligibility:zero()
+         delta = reward - model.estimateQ(state, action, model.weights)
+         -- model.weights = model.weights + model.eligibility * alpha * delta
+         -- model.eligibility:zero()
       else
-         model.accumulateEligibility(state, action, model.eligibility)
+         -- model.accumulateEligibility(state, action, model.eligibility)
          if tdLearnUpdate == 'qLearning' then
             local qVals = model.estimateAllQ(nextState, model.weights)
             local maxQ, maxIdx = qVals:max(1)
@@ -31,7 +33,11 @@ local function getLearningUpdate(opt)
             local qVal = model.estimateQ(nextState, nextAction, model.weights)
             delta = reward + (gamma * qVal) - model.estimateQ(state, action, model.weights)
          end
-         model.weights = model.weights + model.eligibility * alpha * delta
+         -- model.weights = model.weights + model.eligibility * alpha * delta
+      end
+      local featIdx = model.getFeatures(state,action)
+      for i = 1, #featIdx do
+         model.weights[featIdx[i]] = model.weights[featIdx[i]] + (alpha * delta)
       end
    end
    return learn

@@ -6,44 +6,29 @@ local function getModel(opt)
    local initialWeightVal = opt.initialWeightVal
    local traceType = opt.traceType
    local nbActions = envDetails.nbActions
-
-   local function getStateMinsAndScaling(envDetails, numTilings)
-      local nbStates = envDetails.nbStates
-      local stateMins = envDetails.stateSpec.low
-      local stateScalingFactor = {}
-      for i = 1, nbStates do
-         -- ensure that the environment limits are not infinite for scaling
-         if (envDetails.stateSpec.low[i] and envDetails.stateSpec.high[i]) and (envDetails.stateSpec.high[i] < 1000) then
-            stateScalingFactor[i] = (envDetails.stateSpec.high[i] - envDetails.stateSpec.low[i]) / numTilings
-         else
-            stateScalingFactor[i] = 1/numTilings
-         end
-      end
-      return stateScalingFactor, stateMins
-   end
-
-   local stateScalingFactor, stateMins = getStateMinsAndScaling(envDetails, numTilings)
    local memorySize = numTiles * numTiles
    local tc = require 'twrl.agent.model.tilecoding'({numTilings = numTilings, memorySize = memorySize}) 
    local weights = torch.FloatTensor((numTilings * memorySize) + 1):zero():fill(initialWeightVal)
    local eligibility = torch.FloatTensor((numTilings * memorySize) + 1):zero():fill(0)
 
    local function getFeatures(state, action)
-      -- TODO: fix the box actions to append to floats
-      -- TODO: should incorporate statescalingFactor to normalize state observations 
-      floats = state
+      local floats = {}
+      for i = 1, envDetails.nbStates do
+         --TODO: handle when the env space is unbounded
+         floats[i] = (numTilings * state[i]) / (envDetails.stateSpec.high[i] - envDetails.stateSpec.low[i])
+      end
       if envDetails.actionType == 'Discrete' then
          ints = {action}
       else
          table.insert(floats, action)
       end
-      features = tc.tiles(memorySize, numTilings, floats, ints)
-      featIdx = {}
+      local features = tc.tiles(memorySize, numTilings, floats, ints)
+      local featIdx = {}
       for tiling = 1, numTilings do
          featIdx[tiling] = features[tiling] + ((tiling-1) * memorySize) + 1
       end
       -- add a baseline feature
-      table.insert(featIdx, 1, 1)
+      -- table.insert(featIdx, 1, 1)
       return featIdx
    end
 
@@ -83,10 +68,11 @@ local function getModel(opt)
 
    return { 
       weights = weights,
-      eligibility = eligibility,
-      accumulateEligibility = accumulateEligibility,
+      -- eligibility = eligibility,
+      -- accumulateEligibility = accumulateEligibility,
       estimateQ = estimateQ,
       estimateAllQ = estimateAllQ,
+      getFeatures = getFeatures
    }
 end
 return getModel

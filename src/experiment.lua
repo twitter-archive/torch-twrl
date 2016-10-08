@@ -12,7 +12,6 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
    local renderAllSteps = opt.renderAllSteps
    local render = renderAllSteps == 'true' and true or false
    local perf = require 'twrl.perf'({nIterations = nSteps, windowSize = opt.windowSize})
-
    local function run()
       client:env_monitor_start(instanceID, outdir, force, resume, video)
       local agentOpt = opt or {}
@@ -28,12 +27,11 @@ local function experiment(envName, agent, nSteps, nIterations, opt)
       local iterPerformance = {}
 
       for nIter = 1, nIterations do
-         collectgarbage()
          perf.reset()
          local state = client:env_reset(instanceID)
          local action = agent.selectAction(client, instanceID, state)
          for i = 1, nSteps do
-            nextState, reward, terminal, _ = client:env_step(instanceID, action, render)
+            local nextState, reward, terminal, _ = client:env_step(instanceID, action, render)
             if i == nSteps then terminal = true end
             perf.addReward(nIter, reward, terminal)
             nextAction = agent.selectAction(client, instanceID, nextState)
