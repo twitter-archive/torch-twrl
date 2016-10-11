@@ -10,8 +10,8 @@ th /Users/korymathewson/Dropbox/work/torch-twrl/examples/run.lua \
    -learningUpdate tdLambda \
    -model qFunction \
    -learningType noBatch \
-   -epsilon 0.05 \
-   -epsilonDecayRate 1 \
-   -initialWeightVal -1 \
+   -epsilon 0.2 \
+   -epsilonDecayRate 0.9999 \
+   -initialWeightVal 0 \
    -tdLearnUpdate qLearning \
    -relativeAlpha 0.05
