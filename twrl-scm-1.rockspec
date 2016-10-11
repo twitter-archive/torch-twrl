@@ -15,6 +15,7 @@ description = {
 dependencies = {
    "lua >= 5.1",
    "luarocks-fetch-gitrec",
+   "hash",
    "torch >= 7.0",
    "nn >= 1.0.4",
    "penlight >= 1.4.1",
