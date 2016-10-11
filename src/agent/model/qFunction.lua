@@ -14,8 +14,13 @@ local function getModel(opt)
    local function getFeatures(state, action)
       local floats = {}
       for i = 1, envDetails.nbStates do
-         --TODO: handle when the env space is unbounded
-         floats[i] = (numTilings * state[i]) / (envDetails.stateSpec.high[i] - envDetails.stateSpec.low[i])
+         if envDetails.stateSpec.high[i] > 1000 then
+            -- no scaling
+            floats[i] = (numTilings * state[i]) / 1
+         else
+            -- scale to the max and min of the state space
+            floats[i] = (numTilings * state[i]) / (envDetails.stateSpec.high[i] - envDetails.stateSpec.low[i])
+         end
       end
       if envDetails.actionType == 'Discrete' then
          ints = {action}

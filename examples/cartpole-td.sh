@@ -4,7 +4,7 @@ clear
 echo "TD(Lambda) SARSA agent on CartPole Environment"
 echo "************************************"
 
-th run.lua \
+th /Users/korymathewson/Dropbox/work/torch-twrl/examples/run.lua \
    -env 'CartPole-v0' \
    -policy egreedy \
    -learningUpdate tdLambda \
