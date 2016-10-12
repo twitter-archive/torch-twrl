@@ -4,7 +4,7 @@ clear
 echo "TD(Lambda) agent on CartPole Environment"
 echo "************************************"
 
-th /Users/korymathewson/Dropbox/work/torch-twrl/examples/run.lua \
+th run.lua \
    -env 'CartPole-v0' \
    -policy egreedy \
    -learningUpdate tdLambda \
