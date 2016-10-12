@@ -1,7 +1,7 @@
 #! /bin/bash
 
 clear
-echo "TD(Lambda) SARSA agent on CartPole Environment"
+echo "TD(Lambda) agent on CartPole Environment"
 echo "************************************"
 
 th /Users/korymathewson/Dropbox/work/torch-twrl/examples/run.lua \
@@ -13,5 +13,5 @@ th /Users/korymathewson/Dropbox/work/torch-twrl/examples/run.lua \
    -epsilon 0.2 \
    -epsilonDecayRate 0.9999 \
    -initialWeightVal 0 \
-   -tdLearnUpdate qLearning \
+   -tdLearnUpdate SARSA \
    -relativeAlpha 0.05
