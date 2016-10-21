@@ -1,3 +1,5 @@
+require 'torch'
+require 'pl'
 local params = lapp[[
    -b, --base                 (default "gym")                   Use "gym" or "rlenvs"
    -e, --env                  (default "CartPole-v0")           Environment (http://gym.openai.com/envs)

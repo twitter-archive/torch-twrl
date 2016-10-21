@@ -11,11 +11,9 @@ end
 
 function rlEnvsClient:env_create(env_id, opts)
     self.env_id = env_id
-    self.nSteps = opts.nSteps
-    self.stepCounter = 1
     local Env = require('rlenvs.' .. env_id)
     self.env = Env(opts)
-    if opts.renderAllSteps then require 'image' self.qt = pcall(require, 'qt') end
+    if opts.renderAllSteps ~= 'false' then require 'image' self.qt = pcall(require, 'qt') end
     return self.env
 end
 
@@ -41,14 +39,6 @@ end
 
 function rlEnvsClient:env_step(instance_id, action, render, video_callable)
     local reward, obs, done = self.env:step(action)
-    local endOfSteps = self.stepCounter % self.nSteps == 0
-    if self.nSteps then
-        if done then
-            self:env_reset(instance_id)
-        end
-        done = endOfSteps
-    end
-    self.stepCounter = self.stepCounter + 1
     if self.qt then
         image.display({ image = obs, zoom = 10, win = self.window })
     end
@@ -56,42 +46,17 @@ function rlEnvsClient:env_step(instance_id, action, render, video_callable)
 end
 
 function rlEnvsClient:env_action_space_info(instance_id)
-    local actionSpec = self.env:getActionSpec()
-    local action = {}
-    action['name'] = actionSpec[1] == 'int' and 'Discrete' or 'Box'
-    action['n'] = actionSpec[3][2] + 1 -- TODO we just select the MAX value
-    return action
+    return self.env:getActionSpace()
 end
 
 function rlEnvsClient:env_action_space_sample(instance_id)
-    self.actionSpec = self.actionSpec or self:env_action_space_info()
-    local action = torch.random(0, self.actionSpec['n'] - 1) -- TODO this seems hacky, make sure this works with all envs
+    self.actionSpace = self.actionSpace or self:env_action_space_info()
+    local action = torch.random(0, self.actionSpace['n'] - 1)
     return action
 end
 
 function rlEnvsClient:env_observation_space_info(instance_id)
-    local stateSpec = self.env:getStateSpec()
-    local state = {}
-    if torch.type(stateSpec[1]) ~= 'table' then
-        -- it is one entry not multiple
-        state['shape'] = stateSpec[2]
-        state['name'] = state['shape'] == 1 and 'Discrete' or 'Box'
-        state['low'] = { stateSpec[3][1] }
-        state['high'] = { stateSpec[3][2] }
-    else
-        -- multiple entries
-        local low = {}
-        local high = {}
-        for index, value in ipairs(stateSpec) do
-            low[#low + 1] = value[3][1] or math.huge
-            high[#high + 1] = value[3][2] or math.huge
-            state['shape'] = { index } -- TODO the size will be given by this index, we assume each state is a value
-        end
-        state['name'] = 'Box' -- TODO hoping here that they all have the same discrete or box name
-        state['low'] = low
-        state['high'] = high
-    end
-    return state
+    return self.env:getStateSpace()
 end
 
 return m
