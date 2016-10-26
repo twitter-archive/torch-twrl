@@ -12,8 +12,8 @@ end
 function rlEnvsClient:env_create(env_id, opts)
     self.env_id = env_id
     local Env = require('rlenvs.' .. env_id)
+    opts.render = opts.renderAllSteps == 'true'
     self.env = Env(opts)
-    if opts.renderAllSteps ~= 'false' then require 'image' self.qt = pcall(require, 'qt') end
     return self.env
 end
 
@@ -33,15 +33,12 @@ end
 
 function rlEnvsClient:env_reset(instance_id, opts)
     local observation = self.env:start(opts)
-    self.window = self.qt and image.display({ image = observation, zoom = 10 })
     return observation
 end
 
 function rlEnvsClient:env_step(instance_id, action, render, video_callable)
     local reward, obs, done = self.env:step(action)
-    if self.qt then
-        image.display({ image = obs, zoom = 10, win = self.window })
-    end
+    if render then self.env:render() end
     return obs, reward, done
 end
 
