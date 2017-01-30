@@ -10,6 +10,7 @@ twrl.util = require 'twrl.util'
 twrl.perf = require 'twrl.perf'
 twrl.experiment = require 'twrl.experiment'
 twrl.gymClient = require 'twrl.binding-lua.gym_http_client'
+twrl.rlenvsClient = require 'twrl.client'
 
 -- Return package
 return twrl
