@@ -132,10 +132,12 @@ The OpenAI Gym has many environments and is continuously growing. Some agents ma
 
 [Here is a useful table of the environments](https://github.com/openai/gym/wiki/Table-of-environments), with details on the different variables that may help to configure agents appropriately.
 
-Continuous Integration:
+Testing details:
 -----------------------
 
-CI is accomplished by building with [Travis](https://travis-ci.com/twitter/torch-twrl). Testing is done with LUAJIT21, LUA51 and LUA52 with compilers gcc and clang.   
+Continuous integration is accomplished by building with [Travis](https://travis-ci.com/twitter/torch-twrl). Testing is done with LUAJIT21, LUA51 and LUA52 with compilers gcc and clang.
+
+Tests are defined in the /tests directory with separate basic unit tests set and a Gym integration test set.
 
 Known Issues:
 -------------
