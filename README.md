@@ -110,6 +110,19 @@ Note: if you make changes, you will need to recompile with
 luarocks make
 ~~~~
 
+Want to play in [rlenvs](https://github.com/Kaixhin/rlenvs)?
+------------------------------------------------------------
+Rlenvs offers pure lua based environments thus no python needed, which may suit certain users! To install:
+
+```
+luarocks install https://raw.githubusercontent.com/Kaixhin/rlenvs/master/rocks/rlenvs-scm-2.rockspec
+# Optionally install atari dependencies
+luarocks install https://raw.githubusercontent.com/lake4790k/xitari/master/xitari-0-0.rockspec
+luarocks install https://raw.githubusercontent.com/Kaixhin/alewrap/master/alewrap-0-0.rockspec
+```
+
+To use add the `-base rlenvs` flag when using th `th run.lua` command. To see supported environments, see [here](https://github.com/Kaixhin/rlenvs/tree/master/rlenvs).
+
 ## Agents
 torch-twrl implements several agents, they are located in src/agents.
 Agents are defined by a model, policy, and learning update.
