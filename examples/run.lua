@@ -10,8 +10,7 @@ local params = lapp[[
    -i, --nIterations          (default 1000)                    Number of training iterations
    -v, --video                (default 100)                     Record a video every N steps, or false
    -r, --renderAllSteps       (default false)                   Render every step to monitor performance
-   -z, --zoom                 (default false)                   If using rlenvs, the zoom when rendering the environment
-   -f, --force                (default true)                    Force overwrite of the data log
+   -f, --force                (default false)                    Force overwrite of the data log
    -u, --resume               (default false)                   Resume existing experiment
    -p, --timestepsPerBatch    (default 1000)                    Number of steps in a training batch (for batch learning update)
    -z, --stepsizeStart        (default 0.3)                     Starting step size (alpha)
